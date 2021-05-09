@@ -76,7 +76,8 @@ function config(options) {
                 setImmediate: false,
                 path: false,
                 moment: false
-            }
+            },
+            extensions: ['.tsx', '.ts', '.js']
         },
         resolveLoader: {
             modules: ['node_modules', path.join(__dirname, 'loaders')]
@@ -162,6 +163,11 @@ function config(options) {
                     exclude: /(node_modules|babel-helpers\.js)/,
                     loader: 'babel-loader',
                     options: { cacheDirectory: true }
+                },
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/
                 },
                 { test: /argon2\.wasm/, type: 'javascript/auto', loader: 'base64-loader' },
                 { test: /argon2(\.min)?\.js/, loader: 'raw-loader' },
