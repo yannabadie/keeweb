@@ -8,9 +8,8 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "baseUrl": "app/scripts",
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "esModuleInterop": true
   },
-  "paths": {
-  },
-  "include": ["app/scripts/**/*"]
+  "include": ["app/scripts/**/*", "test/src/**/*.ts"]
 }

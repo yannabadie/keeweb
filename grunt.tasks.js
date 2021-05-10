@@ -135,6 +135,4 @@ module.exports = function (grunt) {
         'build-desktop-dist',
         'sign-dist'
     ]);
-
-    grunt.registerTask('build-test', ['webpack:test']);
 };

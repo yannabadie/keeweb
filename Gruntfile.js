@@ -6,7 +6,6 @@ const { execSync } = require('child_process');
 const debug = require('debug');
 
 const webpackConfig = require('./build/webpack.config');
-const webpackConfigTest = require('./test/test.webpack.config');
 const pkg = require('./package.json');
 
 debug.enable('electron-notarize');
@@ -348,8 +347,7 @@ module.exports = function (grunt) {
             }
         },
         webpack: {
-            app: webpackConfig.config(webpackOptions),
-            test: webpackConfigTest
+            app: webpackConfig.config(webpackOptions)
         },
         'webpack-dev-server': {
             options: {
@@ -773,12 +771,6 @@ module.exports = function (grunt) {
                     'dist/desktop/Verify.sha256': ['dist/desktop/KeeWeb-*']
                 }
             }
-        },
-        'run-test': {
-            options: {
-                headless: true
-            },
-            default: 'test/runner.html'
         },
         virustotal: {
             options: {

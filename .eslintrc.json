@@ -132,7 +132,8 @@
             "import/no-commonjs": "error",
             "@typescript-eslint/no-unused-vars": "error",
             "@typescript-eslint/explicit-module-boundary-types": "error",
-            "@typescript-eslint/restrict-template-expressions": "off"
+            "@typescript-eslint/restrict-template-expressions": "off",
+            "jest/valid-expect": "off"
         },
         "parser": "@typescript-eslint/parser",
         "parserOptions": {
@@ -142,6 +143,11 @@
             "ecmaVersion": 11,
             "sourceType": "module",
             "project": ["tsconfig.json", "jsconfig.json"]
+        }
+    }, {
+        "files": ["app/test/**/*.ts"],
+        "env": {
+            "mocha": true
         }
     }],
     "settings": {

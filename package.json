@@ -83,7 +83,6 @@
     "postcss": "^8.2.14",
     "postcss-loader": "^5.2.0",
     "prettier": "^2.2.1",
-    "puppeteer": "^9.1.1",
     "raw-loader": "^4.0.2",
     "run-remote-task": "^0.5.0",
     "sass": "^1.32.12",
@@ -109,7 +108,7 @@
   },
   "scripts": {
     "start": "grunt",
-    "test": "grunt test",
+    "test": "mocha --require ts-node/register --require tsconfig-paths/register --recursive --reporter spec test/**/*.spec.ts",
     "build-beta": "grunt --beta && cp dist/index.html ../keeweb-beta/index.html && cd ../keeweb-beta && git add index.html && git commit -a -m 'beta' && git push origin master",
     "electron": "cross-env KEEWEB_IS_PORTABLE=0 ELECTRON_DISABLE_SECURITY_WARNINGS=1 KEEWEB_EMULATE_HARDWARE_ENCRYPTION=persistent KEEWEB_HTML_PATH=http://localhost:8085 electron desktop --no-sandbox",
     "dev": "grunt dev",
@@ -140,12 +139,15 @@
     "Electron > 6.0.1"
   ],
   "devDependencies": {
+    "@types/chai": "^4.2.18",
+    "@types/mocha": "^8.2.2",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "eslint-config-preact": "^1.1.4",
     "eslint-plugin-import": "^2.22.1",
     "ts-loader": "^9.1.2",
     "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.2.4"
   }
 }

@@ -15,7 +15,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('desktop', 'Build web and desktop apps for all platforms', [
-        'test',
         'default',
         'build-desktop'
     ]);
@@ -78,10 +77,5 @@ module.exports = function(grunt) {
         'chmod:linux-desktop-x64',
         'copy:native-modules-linux-x64',
         'copy:native-messaging-host-linux-x64'
-    ]);
-
-    grunt.registerTask('test', 'Build and run tests', [
-        'build-test',
-        'run-test'
     ]);
 };
