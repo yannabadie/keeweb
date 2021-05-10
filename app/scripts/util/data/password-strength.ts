@@ -1,13 +1,16 @@
+import * as kdbxweb from 'kdbxweb';
+import 'util/kdbxweb/protected-value';
+
 /**
  * Password strength level estimation according to OWASP password recommendations and entropy
  * https://auth0.com/docs/connections/database/password-strength
  */
 
-const PasswordStrengthLevel = {
-    None: 0,
-    Low: 1,
-    Good: 2
-};
+export enum PasswordStrengthLevel {
+    None = 0,
+    Low = 1,
+    Good = 2
+}
 
 const charClasses = new Uint8Array(128);
 for (let i = 48 /* '0' */; i <= 57 /* '9' */; i++) {
@@ -27,8 +30,14 @@ const symbolsPerCharClass = new Uint8Array([
     26 /* uppercase letters */
 ]);
 
-function passwordStrength(password) {
-    if (!password || !password.isProtected) {
+export interface PasswordStrengthResult {
+    level: PasswordStrengthLevel;
+    length: number;
+    onlyDigits?: boolean;
+}
+
+export function passwordStrength(password: kdbxweb.ProtectedValue): PasswordStrengthResult {
+    if (!password?.isProtected) {
         throw new TypeError('Bad password type');
     }
 
@@ -81,5 +90,3 @@ function passwordStrength(password) {
     const level = entropy < 60 ? PasswordStrengthLevel.Low : PasswordStrengthLevel.Good;
     return { length, level, onlyDigits };
 }
-
-export { PasswordStrengthLevel, passwordStrength };
