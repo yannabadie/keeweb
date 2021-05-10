@@ -9,9 +9,9 @@ describe('UrlFormat', () => {
     });
 
     it('should determine if url represents a kdbx file', () => {
-        expect(UrlFormat.isKdbx('//data/file.KdBx')).to.be.true;
-        expect(UrlFormat.isKdbx('//data/file.kdb')).to.be.false;
-        expect(UrlFormat.isKdbx('//data/file.kdbxx')).to.be.false;
+        expect(UrlFormat.isKdbx('//data/file.KdBx')).to.eql(true);
+        expect(UrlFormat.isKdbx('//data/file.kdb')).to.eql(false);
+        expect(UrlFormat.isKdbx('//data/file.kdbxx')).to.eql(false);
     });
 
     it('should replace multiple slashes', () => {
