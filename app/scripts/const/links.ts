@@ -1,4 +1,4 @@
-const Links = {
+export const Links = {
     Homepage: 'https://keeweb.info',
     Repo: 'https://github.com/keeweb/keeweb',
     Desktop: 'https://github.com/keeweb/keeweb/releases/latest',
@@ -35,5 +35,3 @@ const Links = {
     KPXCForEdge:
         'https://microsoftedge.microsoft.com/addons/detail/keepassxcbrowser/pdffhmdngciaglkoonimfcmckehcpafo'
 };
-
-export { Links };

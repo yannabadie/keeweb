@@ -1,4 +1,4 @@
-const Keys = {
+export const Keys = {
     DOM_VK_CANCEL: 3,
     DOM_VK_HELP: 6,
     DOM_VK_BACK_SPACE: 8,
@@ -115,5 +115,3 @@ const Keys = {
     DOM_VK_QUOTE: 222,
     DOM_VK_META: 224
 };
-
-export { Keys };

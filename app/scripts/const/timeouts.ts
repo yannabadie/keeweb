@@ -1,4 +1,4 @@
-const Timeouts = {
+export const Timeouts = {
     CopyTip: 1500,
     AutoHideHint: 3000,
     FileChangeSync: 3000,
@@ -21,5 +21,3 @@ const Timeouts = {
     AutoTypeCopyPaste: 300,
     KeeWebConnectRequest: 60000
 };
-
-export { Timeouts };

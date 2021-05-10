@@ -114,7 +114,7 @@ function config(options) {
                     ]
                 },
                 {
-                    test: /runtime-info\.js$/,
+                    test: /runtime-info\.ts$/,
                     loader: 'string-replace-loader',
                     options: {
                         multiple: [

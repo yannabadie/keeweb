@@ -1,5 +1,5 @@
-const Colors = {
-    AllColors: ['yellow', 'green', 'red', 'orange', 'blue', 'violet'],
+export const Colors = {
+    AllColors: ['yellow', 'green', 'red', 'orange', 'blue', 'violet'] as const,
 
     ColorsValues: {
         yellow: 'ffff00',
@@ -8,7 +8,7 @@ const Colors = {
         orange: 'ff8800',
         blue: '0000ff',
         violet: 'ff00ff'
-    },
+    } as const,
 
     BgColors: {
         yellow: 'ffff88',
@@ -17,7 +17,5 @@ const Colors = {
         orange: 'ffcc88',
         blue: '8888ff',
         violet: 'ff88ff'
-    }
-};
-
-export { Colors };
+    } as const
+} as const;

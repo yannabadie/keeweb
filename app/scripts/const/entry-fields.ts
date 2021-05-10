@@ -1,4 +1,4 @@
-const BuiltInFields = [
+export const BuiltInFields = [
     'Title',
     'Password',
     'UserName',
@@ -7,6 +7,4 @@ const BuiltInFields = [
     'TOTP Seed',
     'TOTP Settings',
     '_etm_template_uuid'
-];
-
-export { BuiltInFields };
+] as const;

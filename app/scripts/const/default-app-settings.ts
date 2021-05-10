@@ -1,4 +1,4 @@
-const DefaultAppSettings = {
+export const DefaultAppSettings = {
     theme: null, // UI theme
     autoSwitchTheme: false, // automatically switch between light and dark theme
     locale: null, // user interface language
@@ -87,6 +87,4 @@ const DefaultAppSettings = {
     onedrive: true, // enable OneDrive integration
     onedriveClientId: null, // custom OneDrive client id
     onedriveClientSecret: null // custom OneDrive client secret
-};
-
-export { DefaultAppSettings };
+} as const;

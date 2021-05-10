@@ -1,4 +1,4 @@
-const IconMap = [
+export const IconMap = [
     'key',
     'globe',
     'exclamation-triangle',
@@ -68,6 +68,4 @@ const IconMap = [
     'dollar-sign',
     'signature',
     'mobile'
-];
-
-export { IconMap };
+] as const;

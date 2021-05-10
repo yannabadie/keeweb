@@ -4,12 +4,12 @@
 //  which you embed in the source code of your application.
 //  (In this context, the client secret is obviously not treated as a secret.)
 
-const DropboxApps = {
+export const DropboxApps = {
     AppFolder: { id: 'qp7ctun6qt5n9d6', secret: '07s5r4ck1uvlj6a' },
     FullDropbox: { id: 'eor7hvv6u6oslq9', secret: 'ez04o1iwf6yprq3' }
-};
+} as const;
 
-const GDriveApps = {
+export const GDriveApps = {
     Local: {
         id: '783608538594-36tkdh8iscrq8t8dq87gghubnhivhjp5.apps.googleusercontent.com',
         secret: 'yAtyfc9TIQ9GyQgQmo3i0HAP'
@@ -22,9 +22,9 @@ const GDriveApps = {
         id: '847548101761-h2pcl2p6m1tssnlqm0vrm33crlveccbr.apps.googleusercontent.com',
         secret: 'nTSCiqXtUNmURIIdASaC1TJK'
     }
-};
+} as const;
 
-const OneDriveApps = {
+export const OneDriveApps = {
     Local: {
         id: 'b97c53d5-db5b-4124-aab9-d39195293815'
     },
@@ -35,6 +35,4 @@ const OneDriveApps = {
         id: 'bbc74d1b-3a9c-46e6-9da4-4c645e830923',
         secret: 'aOMJaktJEAs_Tmh]fx4iQ[Zd3mp3KK7-'
     }
-};
-
-export { DropboxApps, GDriveApps, OneDriveApps };
+} as const;

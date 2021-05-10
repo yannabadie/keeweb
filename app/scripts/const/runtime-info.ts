@@ -1,4 +1,4 @@
-const RuntimeInfo = {
+export const RuntimeInfo = {
     version: '@@VERSION',
     beta: !!'@@BETA',
     buildDate: '@@DATE',
@@ -6,5 +6,3 @@ const RuntimeInfo = {
     devMode: '@@DEVMODE',
     appleTeamId: '@@APPLE_TEAM_ID'
 };
-
-export { RuntimeInfo };
