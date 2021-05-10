@@ -22,7 +22,7 @@ describe('PasswordGenerator', () => {
 
     it('should generate a password with ambiguous characters', () => {
         expect(PasswordGenerator.generate({ length: 10, ambiguous: true })).to.match(
-            new RegExp(`^[O0oIl]{10}$`)
+            /^[O0oIl]{10}$/
         );
     });
 

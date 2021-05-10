@@ -138,7 +138,7 @@ const PHONETIC_POST_SIMPLE_LENGTH = 13;
  * a word, 'ey' more pronounceable than 'iy', etc.
  * @type {{}}
  */
-const REPLACEMENTS = {
+const REPLACEMENTS: { [from: string]: string } = {
     'quu': 'que',
     'qu([aeiou]){2}': 'qu$1',
     '[iu]y': 'ey',
@@ -147,7 +147,29 @@ const REPLACEMENTS = {
     '(^|e)cie(?!$)': '$1cei',
     '([vz])$': '$1e',
     '[iu]w': 'ow'
-};
+} as const;
+
+interface PhoneticOptions {
+    length: number;
+    seed: number | string;
+    phoneticSimplicity?: number;
+    compoundSimplicity?: number;
+}
+
+interface SetOptions {
+    length: number;
+    seed: number | string;
+    phoneticSimplicity: number;
+    compoundSimplicity: number;
+}
+
+interface WordObj {
+    word: string;
+    numeric: number;
+    lastSkippedPre: boolean;
+    lastSkippedPost: boolean;
+    opts: SetOptions;
+}
 
 /**
  * Adds a single syllable to the word contained in the wordObj.  A syllable
@@ -158,7 +180,7 @@ const REPLACEMENTS = {
  * @param {{word, numeric, lastSkippedPre, lastSkippedPost, opts}} wordObj The
  *      word object on which to operate.
  */
-function addSyllable(wordObj) {
+function addSyllable(wordObj: WordObj) {
     const deriv = getDerivative(wordObj.numeric);
     const compound = deriv % wordObj.opts.compoundSimplicity === 0;
     const first = wordObj.word === '';
@@ -192,7 +214,7 @@ function addSyllable(wordObj) {
  * @param {number} num A number from which a derivative should be calculated
  * @returns {number} The derivative.
  */
-function getDerivative(num) {
+function getDerivative(num: number): number {
     let derivative = 1;
     while (num) {
         derivative += num % 7;
@@ -219,18 +241,17 @@ function getDerivative(num) {
  * @returns {{seed, phoneticSimplicity, compoundSimplicity}}
  *      An options object.
  */
-function getOptions(overrides) {
-    const options = {};
-    overrides = overrides || {};
-    options.length = overrides.length || 16;
-    options.seed = overrides.seed || Math.random();
-    options.phoneticSimplicity = overrides.phoneticSimplicity
-        ? Math.max(overrides.phoneticSimplicity, 1)
-        : 5;
-    options.compoundSimplicity = overrides.compoundSimplicity
-        ? Math.max(overrides.compoundSimplicity, 1)
-        : 5;
-    return options;
+function getOptions(overrides: PhoneticOptions): SetOptions {
+    return {
+        length: overrides?.length || 16,
+        seed: overrides?.seed || Math.random(),
+        phoneticSimplicity: overrides?.phoneticSimplicity
+            ? Math.max(overrides.phoneticSimplicity, 1)
+            : 5,
+        compoundSimplicity: overrides?.compoundSimplicity
+            ? Math.max(overrides.compoundSimplicity, 1)
+            : 5
+    };
 }
 
 /**
@@ -248,12 +269,17 @@ function getOptions(overrides) {
  *      phonetics based on the derivative of wordObj.numeric.
  * @returns {string} The chosen phonetic.
  */
-function getNextPhonetic(phoneticSet, simpleCap, wordObj, forceSimple) {
+function getNextPhonetic(
+    phoneticSet: string[],
+    simpleCap: number,
+    wordObj: WordObj,
+    forceSimple = false
+) {
     const deriv = getDerivative(wordObj.numeric);
     const simple = (wordObj.numeric + deriv) % wordObj.opts.phoneticSimplicity > 0;
     const cap = simple || forceSimple ? simpleCap : phoneticSet.length;
     const phonetic = phoneticSet[wordObj.numeric % cap];
-    wordObj.numeric = getNumericHash(wordObj.numeric + wordObj.word);
+    wordObj.numeric = getNumericHash(`${wordObj.numeric}${wordObj.word}`);
     return phonetic;
 }
 
@@ -264,11 +290,11 @@ function getNextPhonetic(phoneticSet, simpleCap, wordObj, forceSimple) {
  * @param {string|number} data The string or number to be hashed.
  * @returns {number}
  */
-function getNumericHash(data) {
+function getNumericHash(data: string | number): number {
     let numeric = 0;
-    data += '-Phonetic';
-    for (let i = 0, len = data.length; i < len; i++) {
-        const chr = data.charCodeAt(i);
+    const str = `${data}-Phonetic`;
+    for (let i = 0, len = str.length; i < len; i++) {
+        const chr = str.charCodeAt(i);
         numeric = (numeric << 5) - numeric + chr;
         numeric >>>= 0;
     }
@@ -285,7 +311,7 @@ function getNumericHash(data) {
  *      word object to be processed.
  * @returns {string} The processed word.
  */
-function postProcess(wordObj) {
+function postProcess(wordObj: WordObj): string {
     let regex;
     for (const i in REPLACEMENTS) {
         if (Object.prototype.hasOwnProperty.call(REPLACEMENTS, i)) {
@@ -303,14 +329,15 @@ function postProcess(wordObj) {
  * @param {*} [options] A collection of options to control the word generator.
  * @returns {string} A generated word.
  */
-function generate(options) {
-    options = getOptions(options);
+function generate(options: PhoneticOptions): string {
+    const setOptions = getOptions(options);
     const length = options.length;
-    const wordObj = {
-        numeric: getNumericHash(options.seed),
+    const wordObj: WordObj = {
+        numeric: getNumericHash(setOptions.seed),
         lastSkippedPost: false,
+        lastSkippedPre: false,
         word: '',
-        opts: options
+        opts: setOptions
     };
     const safeMaxLength = length + 5;
     while (wordObj.word.length < safeMaxLength) {

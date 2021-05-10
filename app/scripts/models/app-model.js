@@ -24,7 +24,7 @@ import { Locale } from 'util/locale';
 import { Logger } from 'util/logger';
 import { noop } from 'util/fn';
 import debounce from 'lodash/debounce';
-import 'util/kdbxweb/protected-value-ex';
+import 'util/kdbxweb/protected-value';
 
 class AppModel {
     tags = [];

@@ -1,8 +1,11 @@
 import * as kdbxweb from 'kdbxweb';
+import 'util/kdbxweb/protected-value';
 import { phonetic } from 'util/generators/phonetic';
 import { shuffle } from 'util/fn';
 
-const CharRanges = {
+type CharRange = 'upper' | 'lower' | 'digits' | 'special' | 'brackets' | 'high' | 'ambiguous';
+
+export const CharRanges: { [range in CharRange]: string } = {
     upper: 'ABCDEFGHJKLMNPQRSTUVWXYZ',
     lower: 'abcdefghijkmnpqrstuvwxyz',
     digits: '123456789',
@@ -11,7 +14,7 @@ const CharRanges = {
     high:
         '¡¢£¤¥¦§©ª«¬®¯°±²³´µ¶¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ',
     ambiguous: 'O0oIl'
-};
+} as const;
 
 const DefaultCharRangesByPattern = {
     'A': CharRanges.upper,
@@ -23,24 +26,39 @@ const DefaultCharRangesByPattern = {
     '0': CharRanges.ambiguous
 };
 
-const PasswordGenerator = {
-    generate(opts) {
-        if (!opts || typeof opts.length !== 'number' || opts.length < 0) {
+type PasswordGeneratorOptions = {
+    length: number;
+    name?: string;
+    pattern?: string;
+    include?: string;
+
+    upper?: boolean;
+    lower?: boolean;
+    digits?: boolean;
+    special?: boolean;
+    brackets?: boolean;
+    high?: boolean;
+    ambiguous?: boolean;
+};
+
+export const PasswordGenerator = {
+    generate(opts: PasswordGeneratorOptions): string {
+        if (typeof opts?.length !== 'number' || opts.length < 0) {
             return '';
         }
         if (opts.name === 'Pronounceable') {
             return this.generatePronounceable(opts);
         }
-        const ranges = Object.keys(CharRanges)
-            .filter((r) => opts[r])
-            .map((r) => CharRanges[r]);
+        const ranges = Object.entries(CharRanges)
+            .filter(([range]) => opts[range as CharRange])
+            .map(([, value]) => value);
         if (opts.include && opts.include.length) {
             ranges.push(opts.include);
         }
         if (!ranges.length) {
             return '';
         }
-        const rangesByPatternChar = {
+        const rangesByPatternChar: { [char: string]: string } = {
             ...DefaultCharRangesByPattern,
             'I': opts.include || ''
         };
@@ -81,9 +99,11 @@ const PasswordGenerator = {
         return chars.join('');
     },
 
-    generatePronounceable(opts) {
+    generatePronounceable(opts: PasswordGeneratorOptions): string {
+        const seed = kdbxweb.ByteUtils.bytesToHex(kdbxweb.CryptoEngine.random(10));
         const pass = phonetic.generate({
-            length: opts.length
+            length: opts.length,
+            seed
         });
         let result = '';
         const upper = [];
@@ -103,24 +123,20 @@ const PasswordGenerator = {
         return result.substr(0, opts.length);
     },
 
-    deriveOpts(password) {
-        const opts = {};
-        let length = 0;
+    deriveOpts(password: kdbxweb.ProtectedValue): PasswordGeneratorOptions {
+        const opts: PasswordGeneratorOptions = { length: 0 };
         if (password) {
             const charRanges = CharRanges;
-            password.forEachChar((ch) => {
-                length++;
-                ch = String.fromCharCode(ch);
+            password.forEachChar((charCode) => {
+                opts.length++;
+                const ch = String.fromCharCode(charCode);
                 for (const [range, chars] of Object.entries(charRanges)) {
-                    if (chars.indexOf(ch) >= 0) {
-                        opts[range] = true;
+                    if (chars.includes(ch)) {
+                        opts[range as CharRange] = true;
                     }
                 }
             });
         }
-        opts.length = length;
         return opts;
     }
 };
-
-export { PasswordGenerator, CharRanges };
