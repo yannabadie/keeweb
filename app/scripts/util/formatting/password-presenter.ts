@@ -1,3 +1,4 @@
+import * as kdbxweb from 'kdbxweb';
 import 'util/kdbxweb/protected-value';
 import { shuffle } from 'util/fn';
 
@@ -7,16 +8,16 @@ class RandomNameGenerator {
     }
 }
 
-function charCodeToHtml(char) {
+function charCodeToHtml(char: number): string {
     return Math.random() < 0.2 ? String.fromCharCode(char) : `&#x${char.toString(16)};`;
 }
 
-const PasswordPresenter = {
-    present(length) {
+export const PasswordPresenter = {
+    present(length: number): string {
         return new Array(length + 1).join('•');
     },
 
-    presentValueWithLineBreaks(value) {
+    presentValueWithLineBreaks(value: kdbxweb.ProtectedValue | undefined): string {
         if (!value) {
             return '';
         }
@@ -27,8 +28,8 @@ const PasswordPresenter = {
         return result;
     },
 
-    asDOM(value) {
-        const items = [];
+    asDOM(value: kdbxweb.ProtectedValue): HTMLElement {
+        const items: { html: string; order: number }[] = [];
 
         const gen = new RandomNameGenerator();
 
@@ -56,7 +57,7 @@ const PasswordPresenter = {
             const el = document.createElement('div');
             el.innerHTML = item.html;
             if (item.order >= 0) {
-                el.style.order = item.order;
+                el.style.order = item.order.toString();
             } else {
                 el.style.display = 'none';
             }
@@ -66,5 +67,3 @@ const PasswordPresenter = {
         return topEl;
     }
 };
-
-export { PasswordPresenter };
