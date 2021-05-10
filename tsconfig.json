@@ -11,5 +11,5 @@
     "noEmitOnError": true,
     "esModuleInterop": true
   },
-  "include": ["app/scripts/**/*", "test/src/**/*.ts"]
+  "include": ["app/scripts/**/*", "test/**/*.ts"]
 }
