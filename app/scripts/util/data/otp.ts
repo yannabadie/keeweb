@@ -55,7 +55,7 @@ class Otp {
             if (!this.period) {
                 throw new Error('Period not set for TOTP');
             }
-            const now = Date.now();
+            const now = Otp.now();
             const epoch = Math.round(now / 1000);
             valueForHashing = Math.floor(epoch / this.period);
             const msPeriod = this.period * 1000;
@@ -107,6 +107,10 @@ class Otp {
             .catch((err) => {
                 callback(null, err);
             });
+    }
+
+    static now(): number {
+        return Date.now();
     }
 
     static hmacToDigits(hmac: number, length: number): string {
