@@ -31,13 +31,12 @@ const SignatureVerifier = {
                     signature = kdbxweb.ByteUtils.base64ToBytes(signature);
                 }
                 const signatureData = kdbxweb.ByteUtils.arrayToBuffer(signature);
-                const subtle = window.crypto.subtle;
                 const keyFormat = 'spki';
-                subtle
+                crypto.subtle
                     .importKey(keyFormat, pkData, algo, false, ['verify'])
                     .then((cryptoKey) => {
                         try {
-                            subtle
+                            crypto.subtle
                                 .verify(
                                     algo,
                                     cryptoKey,
