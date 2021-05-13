@@ -1,4 +1,4 @@
-import { ProtectedValue, ByteUtils } from 'kdbxweb';
+import { ProtectedValue } from 'kdbxweb';
 import 'util/kdbxweb/protected-value';
 import { expect } from 'chai';
 

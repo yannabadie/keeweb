@@ -270,8 +270,9 @@ module.exports = function (grunt) {
             }
         },
         eslint: {
-            app: ['app/scripts/**/*.js'],
-            desktop: ['desktop/**/*.js', '!desktop/node_modules/**'],
+            app: ['app/scripts/**/*.js', 'app/scripts/**/*.ts'],
+            test: ['test/**/*.ts'],
+            desktop: ['desktop/**/*.js'],
             build: ['Gruntfile.js', 'grunt.*.js', 'build/**/*.js', 'webpack.config.js'],
             plugins: ['plugins/**/*.js'],
             util: ['util/**/*.js'],
