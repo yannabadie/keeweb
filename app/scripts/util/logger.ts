@@ -22,7 +22,7 @@ class Logger {
 
     static readonly Level = Level;
 
-    constructor(name: string, id: string, level = Level.All) {
+    constructor(name: string, id?: string, level = Level.All) {
         this.prefix = name ? name + (id ? ':' + id : '') : 'default';
         this.level = level;
     }
