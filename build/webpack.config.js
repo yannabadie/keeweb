@@ -60,6 +60,7 @@ function config(options) {
                 hbs: 'handlebars/runtime.js',
                 'argon2-wasm': 'argon2-browser/dist/argon2.wasm',
                 templates: path.join(rootDir, 'app/templates'),
+                locales: path.join(rootDir, 'app/locales'),
                 'public-key.pem': path.join(rootDir, 'app/resources/public-key.pem'),
                 'public-key-new.pem': path.join(rootDir, 'app/resources/public-key-new.pem'),
                 'demo.kdbx': path.join(rootDir, 'app/resources/Demo.kdbx'),
