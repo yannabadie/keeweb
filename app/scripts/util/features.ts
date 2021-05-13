@@ -3,6 +3,17 @@ const MinDesktopScreenWidth = 800;
 
 const isDesktop = !!(window.process && window.process.versions && window.process.versions.electron);
 
+declare global {
+    interface Window {
+        chrome?: unknown;
+    }
+    interface Navigator {
+        standalone?: boolean;
+    }
+}
+
+let browserIcon: string;
+
 const Features = {
     isDesktop,
     isMac: navigator.platform.indexOf('Mac') >= 0,
@@ -17,19 +28,19 @@ const Features = {
         !/^http(s?):\/\/((localhost:8085)|((app|beta)\.keeweb\.info))/.test(location.href),
     isLocal: location.origin.indexOf('localhost') >= 0,
 
-    get supportsTitleBarStyles() {
+    get supportsTitleBarStyles(): boolean {
         return isDesktop && (this.isMac || this.isWindows);
     },
-    get supportsCustomTitleBarAndDraggableWindow() {
+    get supportsCustomTitleBarAndDraggableWindow(): boolean {
         return isDesktop && this.isMac;
     },
-    get renderCustomTitleBar() {
+    get renderCustomTitleBar(): boolean {
         return isDesktop && this.isWindows;
     },
-    get hasUnicodeFlags() {
+    get hasUnicodeFlags(): boolean {
         return this.isMac;
     },
-    get browserCssClass() {
+    get browserCssClass(): string {
         if (window.chrome && window.navigator.userAgent.indexOf('Chrome/') > -1) {
             return 'chrome';
         }
@@ -41,31 +52,31 @@ const Features = {
         }
         return '';
     },
-    get browserIcon() {
-        if (this._browserIcon) {
-            return this._browserIcon;
+    get browserIcon(): string {
+        if (browserIcon) {
+            return browserIcon;
         }
 
         if (this.isDesktop) {
-            this._browserIcon = this.isMac ? 'safari' : this.isWindows ? 'edge' : 'chrome';
+            browserIcon = this.isMac ? 'safari' : this.isWindows ? 'edge' : 'chrome';
         } else if (/Gecko\//.test(navigator.userAgent)) {
-            this._browserIcon = 'firefox-browser';
+            browserIcon = 'firefox-browser';
         } else if (/Edg\//.test(navigator.userAgent)) {
-            this._browserIcon = 'edge';
+            browserIcon = 'edge';
         } else if (/Chrome\//.test(navigator.userAgent)) {
-            this._browserIcon = 'chrome';
+            browserIcon = 'chrome';
         } else if (this.isMac && /Safari\//.test(navigator.userAgent)) {
-            this._browserIcon = 'safari';
+            browserIcon = 'safari';
         } else {
-            this._browserIcon = 'window-maximize';
+            browserIcon = 'window-maximize';
         }
 
-        return this._browserIcon;
+        return browserIcon;
     },
-    get supportsBrowserExtensions() {
+    get supportsBrowserExtensions(): boolean {
         return !this.isMobile && (this.isDesktop || this.browserIcon !== 'safari');
     },
-    get extensionBrowserFamily() {
+    get extensionBrowserFamily(): string | undefined {
         if (Features.isDesktop) {
             return undefined;
         } else if (/Gecko\//.test(navigator.userAgent)) {
