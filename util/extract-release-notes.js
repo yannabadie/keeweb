@@ -1,3 +1,7 @@
+#!/usr/bin/env node
+
+/* eslint-disable no-console */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -15,7 +19,6 @@ if (!output) {
     throw new Error('No output file, launch with --output=path/to/output-file.md');
 }
 
-// eslint-disable-next-line no-console
 console.log(`Reading release notes for v${version}`);
 
 const releaseNotesPath = path.join(__dirname, '../release-notes.md');
@@ -36,5 +39,4 @@ Want to keep releases happening? Donate to KeeWeb on [OpenCollective](https://op
 fs.mkdirSync(path.dirname(output), { recursive: true });
 fs.writeFileSync(output, body);
 
-// eslint-disable-next-line no-console
 console.log(`Saved release notes for v${version} to ${output}`);

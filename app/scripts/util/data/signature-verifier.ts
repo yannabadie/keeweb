@@ -1,9 +1,7 @@
 import * as kdbxweb from 'kdbxweb';
 import { Logger } from 'util/logger';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires,import/no-commonjs
 const publicKeyData = require('public-key.pem') as { default: string };
-// eslint-disable-next-line @typescript-eslint/no-var-requires,import/no-commonjs
 const publicKeyDataNew = require('public-key-new.pem') as { default: string };
 
 const SignatureVerifier = {

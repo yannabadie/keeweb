@@ -83,14 +83,6 @@
   "overrides": [
     {
       "files": [
-        "app/scripts/**/*.js"
-      ],
-      "rules": {
-        "import/no-commonjs": "error"
-      }
-    },
-    {
-      "files": [
         "*.ts",
         "*.tsx"
       ],
@@ -164,14 +156,15 @@
         "import/no-default-export": "error",
         "babel/no-unused-expressions": "error",
         "node/no-callback-literal": "off",
-        "import/no-commonjs": "error",
+        "import/no-commonjs": "off",
         "prefer-template": "off",
         "no-else-return": "off",
         "jest/valid-expect": "off",
         "jest/expect-expect": "off",
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/explicit-module-boundary-types": "error",
-        "@typescript-eslint/restrict-template-expressions": "off"
+        "@typescript-eslint/restrict-template-expressions": "off",
+        "@typescript-eslint/no-var-requires": "off"
       },
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
