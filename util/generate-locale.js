@@ -15,19 +15,18 @@ const generatedLines = [];
 
 for (const [name, value] of Object.entries(localeData)) {
     if (value.includes('{}')) {
-        generatedLines.push(`${name}: locReplacement('${name}')`);
+        generatedLines.push(`${name}: strWithReplace('${name}')`);
     } else {
-        generatedLines.push(`${name}: locText('${name}')`);
+        generatedLines.push(`${name}: str('${name}')`);
     }
 }
 
-const generatedCode = `const Locale = {\n${generatedLines
-    .map((line) => `    ${line}`)
-    .join(',\n')}\n}`;
+const generatedCode = `// this code is generated using npm run generate-locale
+${generatedLines.map((line) => `    ${line}`).join(',\n')}\n`;
 
 let found = false;
 
-const replacedSourceCode = sourceCode.replace(/^const Locale = \{[^}]+}/gm, () => {
+const replacedSourceCode = sourceCode.replace(/\/\/ this code is generated [^}]+/gm, () => {
     found = true;
     return generatedCode;
 });
