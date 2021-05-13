@@ -23,7 +23,7 @@ import { RuntimeDataModel } from 'models/runtime-data-model';
 import { UpdateModel } from 'models/update-model';
 import { PluginManager } from 'plugins/plugin-manager';
 import { Features } from 'util/features';
-import { KdbxwebInit } from 'util/kdbxweb/kdbxweb-init';
+import { KdbxwebInit } from 'comp/app/kdbxweb-init';
 import { Locale } from 'util/locale';
 import { AppView } from 'views/app-view';
 import 'hbs-helpers';
