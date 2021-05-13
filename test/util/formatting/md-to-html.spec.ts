@@ -10,17 +10,17 @@ describe('MdToHtml', () => {
         createDOMPurify.sanitize = DOMPurify.sanitize.bind(DOMPurify);
     });
 
-    it('should convert markdown', () => {
+    it('converts markdown', () => {
         expect(MdToHtml.convert('## head\n_italic_')).to.eql({
             html: '<div class="markdown"><h2>head</h2>\n<p><em>italic</em></p>\n</div>'
         });
     });
 
-    it('should not add markdown wrapper tags for plaintext', () => {
+    it('does not add markdown wrapper tags for plaintext', () => {
         expect(MdToHtml.convert('plain\ntext')).to.eql({ text: 'plain\ntext' });
     });
 
-    it('should convert links', () => {
+    it('converts links', () => {
         expect(MdToHtml.convert('[link](https://x)')).to.eql({
             html:
                 '<div class="markdown">' +

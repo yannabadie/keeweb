@@ -19,16 +19,16 @@ describe('PasswordStrength', () => {
         }
     }
 
-    it('should return level None for short passwords', () => {
+    it('returns level None for short passwords', () => {
         check('', { level: PasswordStrengthLevel.None, length: 0 });
         check('1234', { level: PasswordStrengthLevel.None, length: 4, onlyDigits: true });
     });
 
-    it('should return level None for single character passwords', () => {
+    it('returns level None for single character passwords', () => {
         check('000000000000', { level: PasswordStrengthLevel.None, length: 12, onlyDigits: true });
     });
 
-    it('should return level Low for simple passwords', () => {
+    it('returns level Low for simple passwords', () => {
         check('12345=', { level: PasswordStrengthLevel.Low, length: 6 });
         check('12345Aa', { level: PasswordStrengthLevel.Low, length: 7 });
         check('1234567a', { level: PasswordStrengthLevel.Low, length: 8 });
@@ -43,7 +43,7 @@ describe('PasswordStrength', () => {
         check('abcdefghijkl', { level: PasswordStrengthLevel.Low, length: 'abcdefghijkl'.length });
     });
 
-    it('should return level Good for passwords matching all criteria', () => {
+    it('returns level Good for passwords matching all criteria', () => {
         check('123456ABcdef', { level: PasswordStrengthLevel.Good, length: 12 });
         check('Abcdef=5k', { level: PasswordStrengthLevel.Good, length: 9 });
         check('12345678901234567890123456', {
@@ -53,7 +53,7 @@ describe('PasswordStrength', () => {
         });
     });
 
-    it('should work with long passwords', () => {
+    it('works with long passwords', () => {
         const pass = 'ABCDabcd_-+=' + '1234567890'.repeat(100);
         check(pass, {
             level: PasswordStrengthLevel.Good,

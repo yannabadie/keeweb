@@ -1,19 +1,33 @@
-class CsvParser {
-    next;
-    csv;
-    index;
-    line = [];
-    lines = [];
-    value = '';
-    error = undefined;
+interface CsvParseResult {
+    headers: string[];
+    rows: string[][];
+}
 
-    parse(csv) {
+type OperationHandler = () => OperationHandler;
+
+/* eslint-disable @typescript-eslint/unbound-method */
+
+class CsvParser {
+    private next: OperationHandler = this.handleError;
+    private csv = '';
+    private index = 0;
+    private line: string[] = [];
+    private lines: string[][] = [];
+    private value = '';
+    result: string[][] = [];
+    error?: string;
+
+    parse(csv: string): CsvParseResult {
         this.csv = csv.trim().replace(/\r\n/g, '\n');
         this.result = [];
         this.next = this.handleBeforeValue;
         this.index = 0;
-        while (this.next && this.index < this.csv.length) {
-            this.next = this.next(this);
+        while (this.index < this.csv.length) {
+            this.next = this.next();
+        }
+        if (this.line.length) {
+            this.lines.push(this.line);
+            this.line = [];
         }
         if (this.lines.length <= 1) {
             throw new Error('Empty CSV');
@@ -21,7 +35,7 @@ class CsvParser {
         return { headers: this.lines[0], rows: this.lines.slice(1) };
     }
 
-    handleBeforeValue() {
+    private handleBeforeValue(): OperationHandler {
         const isQuoted = this.csv[this.index] === '"';
         if (isQuoted) {
             this.index++;
@@ -31,7 +45,7 @@ class CsvParser {
         return this.handleUnquotedValue;
     }
 
-    handleUnquotedValue() {
+    private handleUnquotedValue(): OperationHandler {
         const commaIndex = this.csv.indexOf(',', this.index);
         const newLineIndex = this.csv.indexOf('\n', this.index);
 
@@ -52,7 +66,7 @@ class CsvParser {
         return this.handleAfterValue;
     }
 
-    handleQuotedValue() {
+    private handleQuotedValue(): OperationHandler {
         const nextQuoteIndex = this.csv.indexOf('"', this.index);
         const nextBackslashIndex = this.csv.indexOf('\\', this.index);
 
@@ -90,7 +104,7 @@ class CsvParser {
         return this.handleAfterValue;
     }
 
-    handleAfterValue() {
+    private handleAfterValue(): OperationHandler {
         const hasNextValueOnThisLine = this.csv[this.index] === ',';
         this.index++;
         if (!hasNextValueOnThisLine) {
@@ -100,8 +114,8 @@ class CsvParser {
         return this.handleBeforeValue;
     }
 
-    handleError() {
-        throw new Error(this.error);
+    private handleError(): never {
+        throw new Error(this.error || 'Unknown error');
     }
 }
 

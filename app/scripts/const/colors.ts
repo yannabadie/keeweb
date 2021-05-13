@@ -8,7 +8,7 @@ export const Colors = {
         orange: 'ff8800',
         blue: '0000ff',
         violet: 'ff00ff'
-    } as const,
+    } as { [name: string]: string },
 
     BgColors: {
         yellow: 'ffff88',
@@ -17,5 +17,5 @@ export const Colors = {
         orange: 'ffcc88',
         blue: '8888ff',
         violet: 'ff88ff'
-    } as const
+    } as { [name: string]: string }
 } as const;

@@ -1,5 +1,11 @@
+import * as kdbxweb from 'kdbxweb';
+import 'util/kdbxweb/protected-value';
+
 const Ranking = {
-    getStringRank(s1, s2) {
+    getStringRank(
+        s1: string | kdbxweb.ProtectedValue,
+        s2: string | kdbxweb.ProtectedValue
+    ): number {
         if (!s1 || !s2) {
             return 0;
         }
@@ -21,16 +27,20 @@ const Ranking = {
     }
 };
 
-function indexOf(target, search) {
-    if (target.isProtected) {
+function indexOf(
+    target: string | kdbxweb.ProtectedValue,
+    search: string | kdbxweb.ProtectedValue
+): number {
+    if (target instanceof kdbxweb.ProtectedValue) {
+        if (search instanceof kdbxweb.ProtectedValue) {
+            return target.indexOfLower(search.getText());
+        }
         return target.indexOfLower(search);
     }
-    if (search.isProtected) {
+    if (search instanceof kdbxweb.ProtectedValue) {
         return search.indexOfSelfInLower(target);
     }
     return target.indexOf(search);
 }
-
-window.Ranking = Ranking;
 
 export { Ranking };
