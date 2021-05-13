@@ -8,7 +8,7 @@ export const StringFormat = {
         return str[0].toUpperCase() + str.substr(1);
     },
 
-    pad(num: number, digits: number): string {
+    pad(num: number | string, digits: number): string {
         let str = num.toString();
         while (str.length < digits) {
             str = '0' + str;
