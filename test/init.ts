@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { Crypto } from '@peculiar/webcrypto';
 
+// noinspection JSConstantReassignment
 global.crypto = new Crypto();
 
 const appBasePath = path.resolve(__dirname, '..', 'app');
