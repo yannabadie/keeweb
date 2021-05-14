@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 
 const webpack = require('webpack');
 
@@ -57,9 +56,7 @@ function config(options) {
                 marked: devMode ? 'marked/lib/marked.js' : 'marked/marked.min.js',
                 dompurify: `dompurify/dist/purify${devMode ? '' : '.min'}.js`,
                 tweetnacl: `tweetnacl/nacl${devMode ? '' : '.min'}.js`,
-                hbs: 'handlebars/runtime.js',
                 'argon2-wasm': 'argon2-browser/dist/argon2.wasm',
-                templates: path.join(rootDir, 'app/templates'),
                 locales: path.join(rootDir, 'app/locales'),
                 'public-key.pem': path.join(rootDir, 'app/resources/public-key.pem'),
                 'public-key-new.pem': path.join(rootDir, 'app/resources/public-key-new.pem'),
@@ -85,35 +82,6 @@ function config(options) {
         },
         module: {
             rules: [
-                {
-                    test: /\.hbs$/,
-                    use: [
-                        {
-                            loader: 'handlebars-loader',
-                            options: {
-                                knownHelpers: fs
-                                    .readdirSync(path.join(rootDir, 'app/scripts/hbs-helpers'))
-                                    .map((f) => f.replace('.js', ''))
-                                    .filter((f) => f !== 'index'),
-                                partialResolver(partial, callback) {
-                                    const location = path.join(
-                                        rootDir,
-                                        'app/templates/partials',
-                                        `${partial}.hbs`
-                                    );
-                                    callback(null, location);
-                                }
-                            }
-                        },
-                        {
-                            loader: 'string-replace-loader',
-                            options: {
-                                search: /\r?\n\s*/g,
-                                replace: '\n'
-                            }
-                        }
-                    ]
-                },
                 {
                     test: /runtime-info\.ts$/,
                     loader: 'string-replace-loader',
@@ -158,7 +126,6 @@ function config(options) {
                     loader: 'exports-loader',
                     options: { type: 'module', exports: 'default babelHelpers' }
                 },
-                { test: /handlebars/, loader: 'strip-sourcemap-loader' },
                 {
                     test: /\.js$/,
                     exclude: /(node_modules|babel-helpers\.js)/,
