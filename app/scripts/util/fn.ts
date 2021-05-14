@@ -1,4 +1,4 @@
-// TODO: remove this
+// TODO(ts): remove this
 export function escape(str: string): string {
     if (!str) {
         return str;
@@ -23,7 +23,7 @@ export function shuffle<T>(array: T[]): T[] {
     return array;
 }
 
-// TODO: remove this
+// TODO(ts): remove this
 export function pick(
     obj: { [prop: string]: any } | undefined,
     props: string[]
@@ -41,7 +41,7 @@ export function pick(
     return result;
 }
 
-// TODO: remove this
+// TODO(ts): remove this
 export function omit(
     obj: { [prop: string]: any } | undefined,
     props: string[]
@@ -56,7 +56,7 @@ export function omit(
     return result;
 }
 
-// TODO: remove this
+// TODO(ts): remove this
 export function omitEmpty(
     obj: { [prop: string]: any } | undefined
 ): { [prop: string]: any } | undefined {
@@ -72,7 +72,7 @@ export function omitEmpty(
     }, {});
 }
 
-// TODO: remove this
+// TODO(ts): remove this
 export function mapObject(
     obj: { [prop: string]: any },
     fn: (v: any) => any
