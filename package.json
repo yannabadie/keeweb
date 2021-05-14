@@ -104,6 +104,7 @@
     "svgicons2svgfont": "^10.0.1",
     "terser-webpack-plugin": "^5.1.2",
     "time-grunt": "2.0.0",
+    "tiny-typed-emitter": "^2.0.3",
     "ts-loader": "^9.1.2",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
