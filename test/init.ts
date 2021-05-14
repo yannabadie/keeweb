@@ -3,6 +3,9 @@
 const Module = require('module');
 import * as path from 'path';
 import * as fs from 'fs';
+import { Crypto } from '@peculiar/webcrypto';
+
+global.crypto = new Crypto();
 
 const appBasePath = path.resolve(__dirname, '..', 'app');
 
@@ -30,8 +33,8 @@ function requireTextFile(filePath: string): () => { default: string } {
 }
 
 const knownModules: { [name: string]: any } = {
-    'public-key.pem': requireTextFile('keys/public-key.pem'),
-    'public-key-new.pem': requireTextFile('keys/public-key-new.pem')
+    'public-key.pem': requireTextFile('app/resources/public-key.pem'),
+    'public-key-new.pem': requireTextFile('app/resources/public-key-new.pem')
 };
 
 const originalRequire = Module.prototype.require;

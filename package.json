@@ -123,7 +123,7 @@
   },
   "scripts": {
     "start": "grunt",
-    "test": "mocha --require ts-node/register --require tsconfig-paths/register --recursive --reporter spec test/**/*.ts",
+    "test": "mocha --require ts-node/register --require tsconfig-paths/register --require test/init.ts --recursive --reporter spec 'test/**/*.spec.ts'",
     "eslint": "grunt eslint",
     "build-beta": "grunt --beta && cp dist/index.html ../keeweb-beta/index.html && cd ../keeweb-beta && git add index.html && git commit -a -m 'beta' && git push origin master",
     "electron": "cross-env KEEWEB_IS_PORTABLE=0 ELECTRON_DISABLE_SECURITY_WARNINGS=1 KEEWEB_EMULATE_HARDWARE_ENCRYPTION=persistent KEEWEB_HTML_PATH=http://localhost:8085 electron desktop --no-sandbox",
