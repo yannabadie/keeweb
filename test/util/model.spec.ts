@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { DefaultModelEvents, Model } from 'framework/model';
+import { DefaultModelEvents, Model } from 'util/model';
 
 describe('Model', () => {
     interface TestModelEvents extends DefaultModelEvents {
