@@ -170,12 +170,15 @@ export class LauncherElectron {
     // createFsWatcher(path) {
     //     return this.req('fs').watch(path, { persistent: false });
     // },
-    // loadConfig(name) {
-    //     return this.remoteApp().loadConfig(name);
-    // },
-    // saveConfig(name, data) {
-    //     return this.remoteApp().saveConfig(name, data);
-    // },
+
+    async loadConfig(name: string): Promise<string> {
+        return await this.ipcRenderer.invoke('load-config', name);
+    }
+
+    async saveConfig(name: string, data: string): Promise<void> {
+        await this.ipcRenderer.invoke('save-config', name, data);
+    }
+
     // preventExit(e) {
     //     e.returnValue = false;
     //     return false;
