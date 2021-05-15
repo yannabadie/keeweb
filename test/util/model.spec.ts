@@ -189,6 +189,13 @@ describe('Model', () => {
     it('sets properties in a batch', () => {
         const model = new TestModel();
 
+        model.batchSet(() => {
+            model.str = 'a';
+            model.num = 10;
+        });
+        expect(model.str).to.eql('a');
+        expect(model.num).to.eql(10);
+
         let changed = 0;
         model.on('change', () => {
             changed++;
