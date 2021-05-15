@@ -5,7 +5,6 @@ import { JSDOM } from 'jsdom';
 
 describe('MdToHtml', () => {
     beforeEach(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         const DOMPurify = createDOMPurify(new JSDOM('').window as unknown as Window);
         createDOMPurify.sanitize = DOMPurify.sanitize.bind(DOMPurify);
     });
