@@ -4,9 +4,9 @@ import { Logger } from 'util/logger';
 const publicKeyData = require('public-key.pem') as { default: string };
 const publicKeyDataNew = require('public-key-new.pem') as { default: string };
 
-const SignatureVerifier = {
-    logger: new Logger('signature-verifier'),
+const logger = new Logger('signature-verifier');
 
+const SignatureVerifier = {
     publicKeys: undefined as string[] | undefined,
 
     verify(
@@ -47,20 +47,20 @@ const SignatureVerifier = {
                                     resolve(isValid);
                                 })
                                 .catch((e) => {
-                                    this.logger.error('Verify error', e);
+                                    logger.error('Verify error', e);
                                     reject(e);
                                 });
                         } catch (e) {
-                            this.logger.error('Signature verification error', e);
+                            logger.error('Signature verification error', e);
                             reject(e);
                         }
                     })
                     .catch((e) => {
-                        this.logger.error('ImportKey error', e);
+                        logger.error('ImportKey error', e);
                         reject(e);
                     });
             } catch (e) {
-                this.logger.error('Signature key verification error', e);
+                logger.error('Signature key verification error', e);
                 reject(e);
             }
         });
@@ -70,16 +70,18 @@ const SignatureVerifier = {
         if (!this.publicKeys) {
             this.publicKeys = [];
             for (const pkData of [publicKeyData, publicKeyDataNew]) {
-                const match = /-+BEGIN PUBLIC KEY-+([\s\S]+?)-+END PUBLIC KEY-+/.exec(
-                    pkData.default
-                );
-                const data = match?.[1]?.replace(/\s+/g, '');
+                const data = this.extractPublicKeyContent(pkData.default);
                 if (data) {
                     this.publicKeys.push(data);
                 }
             }
         }
         return this.publicKeys;
+    },
+
+    extractPublicKeyContent(rawPEM: string): string | undefined {
+        const match = /-+BEGIN PUBLIC KEY-+([\s\S]+?)-+END PUBLIC KEY-+/.exec(rawPEM);
+        return match?.[1]?.replace(/\s+/g, '');
     }
 };
 
