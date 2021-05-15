@@ -25,14 +25,14 @@ export const UrlFormat = {
         return url.replace(this.lastPartRegex, '') || '/';
     },
 
-    makeUrl(base: string, args: { [name: string]: string }): string {
+    makeUrl(base: string, args: Record<string, string>): string {
         const queryString = Object.entries(args)
             .map(([key, value]) => key + '=' + encodeURIComponent(value))
             .join('&');
         return base + '?' + queryString;
     },
 
-    buildFormData(params: { [name: string]: string }): string {
+    buildFormData(params: Record<string, string>): string {
         return Object.entries(params)
             .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
             .join('&');

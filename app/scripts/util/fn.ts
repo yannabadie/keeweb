@@ -25,13 +25,13 @@ export function shuffle<T>(array: T[]): T[] {
 
 // TODO(ts): remove this
 export function pick(
-    obj: { [prop: string]: any } | undefined,
+    obj: Record<string, any> | undefined,
     props: string[]
-): { [prop: string]: any } | undefined {
+): Record<string, any> | undefined {
     if (!obj) {
         return obj;
     }
-    const result: { [prop: string]: any } = {};
+    const result: Record<string, any> = {};
     for (const prop of props) {
         if (Object.prototype.hasOwnProperty.call(obj, prop)) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -43,9 +43,9 @@ export function pick(
 
 // TODO(ts): remove this
 export function omit(
-    obj: { [prop: string]: any } | undefined,
+    obj: Record<string, any> | undefined,
     props: string[]
-): { [prop: string]: any } | undefined {
+): Record<string, any> | undefined {
     if (!obj) {
         return obj;
     }
@@ -57,13 +57,11 @@ export function omit(
 }
 
 // TODO(ts): remove this
-export function omitEmpty(
-    obj: { [prop: string]: any } | undefined
-): { [prop: string]: any } | undefined {
+export function omitEmpty(obj: Record<string, any> | undefined): Record<string, any> | undefined {
     if (!obj) {
         return obj;
     }
-    return Object.entries(obj).reduce((result: { [prop: string]: any }, [key, value]) => {
+    return Object.entries(obj).reduce((result: Record<string, any>, [key, value]) => {
         if (value) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             result[key] = value;
@@ -73,11 +71,8 @@ export function omitEmpty(
 }
 
 // TODO(ts): remove this
-export function mapObject(
-    obj: { [prop: string]: any },
-    fn: (v: any) => any
-): { [prop: string]: any } {
-    return Object.entries(obj).reduce((result: { [prop: string]: any }, [key, value]) => {
+export function mapObject(obj: Record<string, any>, fn: (v: any) => any): Record<string, any> {
+    return Object.entries(obj).reduce((result: Record<string, any>, [key, value]) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         result[key] = fn(value);
         return result;

@@ -138,7 +138,7 @@ const PHONETIC_POST_SIMPLE_LENGTH = 13;
  * a word, 'ey' more pronounceable than 'iy', etc.
  * @type {{}}
  */
-const REPLACEMENTS: { [from: string]: string } = {
+const REPLACEMENTS: Record<string, string> = {
     'quu': 'que',
     'qu([aeiou]){2}': 'qu$1',
     '[iu]y': 'ey',

@@ -8,7 +8,7 @@ import {
 
 describe('PasswordStrength', () => {
     function check(password: string, expected: PasswordStrengthResult): void {
-        let actual: { [prop: string]: any } = passwordStrength(
+        let actual: Record<string, any> = passwordStrength(
             kdbxweb.ProtectedValue.fromString(password)
         );
         expected = { onlyDigits: false, ...expected };

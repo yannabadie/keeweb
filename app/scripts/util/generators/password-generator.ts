@@ -5,7 +5,7 @@ import { shuffle } from 'util/fn';
 
 type CharRange = 'upper' | 'lower' | 'digits' | 'special' | 'brackets' | 'high' | 'ambiguous';
 
-export const CharRanges: { [range in CharRange]: string } = {
+export const CharRanges: Record<CharRange, string> = {
     upper: 'ABCDEFGHJKLMNPQRSTUVWXYZ',
     lower: 'abcdefghijkmnpqrstuvwxyz',
     digits: '123456789',
@@ -58,7 +58,7 @@ export const PasswordGenerator = {
         if (!ranges.length) {
             return '';
         }
-        const rangesByPatternChar: { [char: string]: string } = {
+        const rangesByPatternChar: Record<string, string> = {
             ...DefaultCharRangesByPattern,
             'I': opts.include || ''
         };

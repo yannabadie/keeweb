@@ -1,12 +1,12 @@
-const baseLocale = require('locales/base.json') as { [name: string]: string };
+const baseLocale = require('locales/base.json') as Record<string, string>;
 
 interface LocWithReplace {
     with(value: string): string;
 }
 
-let activeLocale: { [name: string]: string } | undefined;
+let activeLocale: Record<string, string> | undefined;
 
-function set(values: { [name: string]: string } | undefined): void {
+function set(values: Record<string, string> | undefined): void {
     activeLocale = values;
 }
 

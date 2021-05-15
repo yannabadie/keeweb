@@ -33,7 +33,7 @@ function requireTextFile(filePath: string): () => { default: string } {
     };
 }
 
-const knownModules: { [name: string]: any } = {
+const knownModules: Record<string, any> = {
     'public-key.pem': requireTextFile('app/resources/public-key.pem'),
     'public-key-new.pem': requireTextFile('app/resources/public-key-new.pem')
 };
