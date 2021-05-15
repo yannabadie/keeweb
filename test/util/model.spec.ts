@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { DefaultModelEvents, Model } from 'util/model';
+import { DefaultModelEvents, ListenerSignature, Model } from 'util/model';
 
 describe('Model', () => {
     interface TestModelEvents extends DefaultModelEvents {
@@ -355,5 +355,49 @@ describe('Model', () => {
 
         expect(changed).to.eql(1);
         expect(changedProps).to.eql(1);
+    });
+
+    it('supports derived models with events', () => {
+        interface BaseModelEvents extends DefaultModelEvents {
+            'base': () => void;
+        }
+        class BaseModel<
+            Events extends ListenerSignature<Events> = BaseModelEvents
+        > extends Model<Events> {
+            baseProp = 1;
+
+            emitBase(this: BaseModel) {
+                this.emit('base');
+            }
+        }
+
+        interface DerivedModelEvents extends BaseModelEvents {
+            'derived': () => void;
+        }
+        class DerivedModel extends BaseModel<DerivedModelEvents> {
+            derivedProp = 2;
+
+            emitDerived() {
+                this.emit('derived');
+            }
+        }
+
+        const model = new DerivedModel();
+
+        let changeFired = 0;
+        let baseFired = 0;
+        let derivedFired = 0;
+        model.on('change', () => changeFired++);
+        model.on('base', () => baseFired++);
+        model.on('derived', () => derivedFired++);
+
+        model.emitBase();
+        model.emitDerived();
+        model.baseProp++;
+        model.derivedProp++;
+
+        expect(changeFired).to.eql(2);
+        expect(baseFired).to.eql(1);
+        expect(derivedFired).to.eql(1);
     });
 });

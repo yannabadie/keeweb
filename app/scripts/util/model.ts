@@ -1,6 +1,6 @@
 import { TypedEmitter } from 'tiny-typed-emitter';
 
-type ListenerSignature<EventSpec> = {
+export type ListenerSignature<EventSpec> = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [EventName in keyof EventSpec]: (...args: any[]) => any;
 };
