@@ -8,7 +8,7 @@ const SettingsStore = {
     async load(key: string): Promise<unknown> {
         let data: string | null;
         if (Launcher) {
-            data = await Launcher.loadConfig(key);
+            data = await Launcher.ipcRenderer.invoke('load-config', key);
         } else {
             data = localStorage?.getItem(StringFormat.camelCase(key));
         }
@@ -29,14 +29,15 @@ const SettingsStore = {
     },
 
     async save(key: string, data: unknown): Promise<void> {
+        const dataStr = JSON.stringify(data);
         if (Launcher) {
             try {
-                await Launcher.saveConfig(key, JSON.stringify(data));
+                await Launcher.ipcRenderer.invoke('save-config', key, dataStr);
             } catch (err) {
                 logger.error(`Error saving ${key}`, err);
             }
         } else {
-            localStorage?.setItem(StringFormat.camelCase(key), JSON.stringify(data));
+            localStorage?.setItem(StringFormat.camelCase(key), dataStr);
         }
         return Promise.resolve();
     }

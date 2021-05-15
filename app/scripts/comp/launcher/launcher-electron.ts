@@ -170,15 +170,6 @@ export class LauncherElectron {
     // createFsWatcher(path) {
     //     return this.req('fs').watch(path, { persistent: false });
     // },
-
-    async loadConfig(name: string): Promise<string> {
-        return await this.ipcRenderer.invoke('load-config', name);
-    }
-
-    async saveConfig(name: string, data: string): Promise<void> {
-        await this.ipcRenderer.invoke('save-config', name, data);
-    }
-
     // preventExit(e) {
     //     e.returnValue = false;
     //     return false;
