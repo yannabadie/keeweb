@@ -136,7 +136,7 @@
         "prefer-rest-params": "error",
         "prefer-spread": "error",
         "no-useless-constructor": "error",
-        "no-dupe-class-members": "error",
+        "no-dupe-class-members": "off",
         "no-duplicate-imports": "error",
         "eqeqeq": "error",
         "no-unneeded-ternary": "error",

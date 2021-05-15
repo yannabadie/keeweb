@@ -27,7 +27,9 @@ class Logger {
         this.level = level;
     }
 
-    ts(ts: number | string | undefined): string | number {
+    ts(): number;
+    ts(ts: number): string;
+    ts(ts?: number): string | number {
         if (typeof ts === 'number') {
             return `${Math.round(performance.now() - ts)}ms`;
         } else {
