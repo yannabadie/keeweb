@@ -19,10 +19,6 @@ const DefaultMaxListeners = 100;
 
 const SymbolEmitter = Symbol('emitter');
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 function emitPropChange(target: Model, prop: string, value: unknown, prevValue: unknown) {
     const emitter = target[SymbolEmitter] as ModelTypedEmitter;
     if (emitter) {
@@ -36,6 +32,10 @@ function emitPropChange(target: Model, prop: string, value: unknown, prevValue: 
         }
     }
 }
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 const ProxyDef: ProxyHandler<any> = {
     deleteProperty(target: any, prop: string | symbol): boolean {
