@@ -148,7 +148,7 @@ class Otp {
     }
 
     static parseUrl(url: string): Otp {
-        const match = /^otpauth:\/\/(\w+)\/([^\?]+)\?(.*)/i.exec(url);
+        const match = /^otpauth:\/\/(\w+)\/([^?]+)\?(.*)/i.exec(url);
         if (!match) {
             throw new Error('Not OTP url');
         }
@@ -170,9 +170,9 @@ class Otp {
 
         const secret = otherParams.get('secret');
         const algorithm = otherParams.get('algorithm')?.toUpperCase() || 'SHA1';
-        const digits = Number.parseInt(otherParams.get('digits') || '') || 6;
-        const counter = Number.parseInt(otherParams.get('counter') || '') || undefined;
-        const period = Number.parseInt(otherParams.get('period') || '') || 30;
+        const digits = Number.parseInt(otherParams.get('digits') || '', 10) || 6;
+        const counter = Number.parseInt(otherParams.get('counter') || '', 10) || undefined;
+        const period = Number.parseInt(otherParams.get('period') || '', 10) || 30;
 
         if (type !== 'hotp' && type !== 'totp') {
             throw new Error(`Bad type: ${type}`);

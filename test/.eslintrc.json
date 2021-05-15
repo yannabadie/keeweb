@@ -1,0 +1,14 @@
+{
+  "parserOptions": {
+    "project": [
+      "../tsconfig.json",
+      "../jsconfig.json"
+    ]
+  },
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "@typescript-eslint/no-non-null-assertion": "off"
+  }
+}

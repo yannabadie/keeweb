@@ -161,8 +161,10 @@
         "no-else-return": "off",
         "jest/valid-expect": "off",
         "jest/expect-expect": "off",
+        "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/explicit-module-boundary-types": "error",
+        "@typescript-eslint/no-non-null-assertion": "error",
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-var-requires": "off"
       },
@@ -177,14 +179,6 @@
           "tsconfig.json",
           "jsconfig.json"
         ]
-      }
-    },
-    {
-      "files": [
-        "app/test/**/*.ts"
-      ],
-      "env": {
-        "mocha": true
       }
     }
   ],

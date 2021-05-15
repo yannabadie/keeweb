@@ -1,4 +1,3 @@
-// TODO(ts): remove this
 export function escape(str: string): string {
     if (!str) {
         return str;
@@ -23,29 +22,26 @@ export function shuffle<T>(array: T[]): T[] {
     return array;
 }
 
-// TODO(ts): remove this
 export function pick(
-    obj: Record<string, any> | undefined,
+    obj: Record<string, unknown> | undefined,
     props: string[]
-): Record<string, any> | undefined {
+): Record<string, unknown> | undefined {
     if (!obj) {
         return obj;
     }
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
     for (const prop of props) {
         if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             result[prop] = obj[prop];
         }
     }
     return result;
 }
 
-// TODO(ts): remove this
 export function omit(
-    obj: Record<string, any> | undefined,
+    obj: Record<string, unknown> | undefined,
     props: string[]
-): Record<string, any> | undefined {
+): Record<string, unknown> | undefined {
     if (!obj) {
         return obj;
     }
@@ -56,27 +52,28 @@ export function omit(
     return result;
 }
 
-// TODO(ts): remove this
-export function omitEmpty(obj: Record<string, any> | undefined): Record<string, any> | undefined {
+export function omitEmpty(
+    obj: Record<string, unknown> | undefined
+): Record<string, unknown> | undefined {
     if (!obj) {
         return obj;
     }
-    return Object.entries(obj).reduce((result: Record<string, any>, [key, value]) => {
+    return Object.entries(obj).reduce((result, [key, value]) => {
         if (value) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             result[key] = value;
         }
         return result;
-    }, {});
+    }, {} as Record<string, unknown>);
 }
 
-// TODO(ts): remove this
-export function mapObject(obj: Record<string, any>, fn: (v: any) => any): Record<string, any> {
-    return Object.entries(obj).reduce((result: Record<string, any>, [key, value]) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+export function mapObject<From, To>(
+    obj: Record<string, From>,
+    fn: (v: From) => To
+): Record<string, To> {
+    return Object.entries(obj).reduce((result, [key, value]) => {
         result[key] = fn(value);
         return result;
-    }, {});
+    }, {} as Record<string, To>);
 }
 
 export function isEqual<T>(a: T, b: T): boolean {

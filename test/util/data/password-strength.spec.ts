@@ -8,11 +8,9 @@ import {
 
 describe('PasswordStrength', () => {
     function check(password: string, expected: PasswordStrengthResult): void {
-        let actual: Record<string, any> = passwordStrength(
-            kdbxweb.ProtectedValue.fromString(password)
-        );
+        const actualResult = passwordStrength(kdbxweb.ProtectedValue.fromString(password));
         expected = { onlyDigits: false, ...expected };
-        actual = { onlyDigits: false, ...actual };
+        const actual = { onlyDigits: false, ...actualResult } as Record<string, unknown>;
 
         for (const [prop, expVal] of Object.entries(expected)) {
             expect(actual[prop]).to.eql(expVal, `${prop} is ${expVal} for password "${password}"`);

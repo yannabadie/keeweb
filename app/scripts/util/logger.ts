@@ -11,7 +11,7 @@ const MaxLogsToSave = 100;
 
 interface LogItem {
     level: string;
-    args: any[];
+    args: unknown[];
 }
 
 const lastLogs: LogItem[] = [];
@@ -39,7 +39,7 @@ class Logger {
         return new Date().toISOString() + ' [' + this.prefix + '] ';
     }
 
-    debug(...args: any[]): void {
+    debug(...args: unknown[]): void {
         args[0] = `${this.getPrefix()}${args[0]}`;
         if (this.level >= Level.Debug) {
             Logger.saveLast('debug', args);
@@ -47,7 +47,7 @@ class Logger {
         }
     }
 
-    info(...args: any[]): void {
+    info(...args: unknown[]): void {
         args[0] = `${this.getPrefix()}${args[0]}`;
         if (this.level >= Level.Info) {
             Logger.saveLast('info', args);
@@ -55,7 +55,7 @@ class Logger {
         }
     }
 
-    warn(...args: any[]): void {
+    warn(...args: unknown[]): void {
         args[0] = `${this.getPrefix()}${args[0]}`;
         if (this.level >= Level.Warn) {
             Logger.saveLast('warn', args);
@@ -63,7 +63,7 @@ class Logger {
         }
     }
 
-    error(...args: any[]): void {
+    error(...args: unknown[]): void {
         args[0] = `${this.getPrefix()}${args[0]}`;
         if (this.level >= Level.Error) {
             Logger.saveLast('error', args);
@@ -79,7 +79,7 @@ class Logger {
         return this.level;
     }
 
-    static saveLast(level: string, args: any[]): void {
+    static saveLast(level: string, args: unknown[]): void {
         lastLogs.push({ level, args: Array.prototype.slice.call(args) });
         if (lastLogs.length > MaxLogsToSave) {
             lastLogs.shift();
