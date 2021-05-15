@@ -21,7 +21,7 @@ const SettingsStore = {
                 logger.error(`Error loading ${key}: read not an object`, parsed);
                 return Promise.resolve();
             }
-            return Promise.resolve(parsed as Record<string, unknown>);
+            return Promise.resolve(parsed);
         } catch (err) {
             logger.error(`Error loading ${key}`, err);
             return Promise.resolve();
