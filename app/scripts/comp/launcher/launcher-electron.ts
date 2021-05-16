@@ -35,10 +35,6 @@ type TypedIpcRenderer = {
 export class LauncherElectron {
     name = 'electron';
     version = process.versions.electron;
-    autoTypeSupported = true;
-    thirdPartyStoragesSupported = true;
-    clipboardSupported = true;
-    devTools = true;
 
     get platform(): NodeJS.Platform {
         return process.platform;
