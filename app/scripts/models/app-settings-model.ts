@@ -118,7 +118,12 @@ class AppSettingsModel extends Model {
 
             this.batchSet(() => {
                 for (const [key, value] of Object.entries(record)) {
-                    if (!this.set(key as NonNullable<NonFunctionPropertyNames<this>>, value)) {
+                    if (
+                        !this.set(
+                            key as NonNullable<NonFunctionPropertyNames<AppSettingsModel>>,
+                            value
+                        )
+                    ) {
                         logger.warn('Bad setting', key, value);
                     }
                 }
@@ -159,7 +164,7 @@ class AppSettingsModel extends Model {
         await SettingsStore.save('app-settings', this).catch(noop);
     }
 
-    set(key: NonNullable<NonFunctionPropertyNames<this>>, value: unknown): boolean {
+    set(key: NonNullable<NonFunctionPropertyNames<AppSettingsModel>>, value: unknown): boolean {
         switch (key) {
             case 'theme':
                 return setOptionalString(this, 'theme', value);
@@ -227,8 +232,8 @@ class AppSettingsModel extends Model {
                 return setFontSize(instance, value);
             case 'tableViewColumns':
                 return setTableViewColumns(instance, value);
-            case 'generatorPresets':
-                return false;
+            // case 'generatorPresets':
+            //     return false;
             case 'generatorHidePassword':
                 return setBoolean(instance, 'generatorHidePassword', value);
             case 'cacheConfigSettings':
@@ -336,9 +341,14 @@ class AppSettingsModel extends Model {
         const defaultValues = new AppSettingsModel();
         this.batchSet(() => {
             for (const [key, value] of Object.entries(defaultValues)) {
-                this.set(key as NonNullable<NonFunctionPropertyNames<this>>, value);
+                this.set(key as NonNullable<NonFunctionPropertyNames<AppSettingsModel>>, value);
             }
         });
+    }
+
+    delete(key: NonFunctionPropertyNames<AppSettingsModel>): void {
+        const defaultValues = new AppSettingsModel();
+        this.set(key, defaultValues[key]);
     }
 }
 
@@ -501,7 +511,7 @@ function setWebdavSaveMethod(instance: AppSettingsModel, value: unknown) {
     return false;
 }
 
-type AppSettingsFieldName = NonFunctionPropertyNames<AppSettingsModel>;
+type AppSettingsFieldName = NonNullable<NonFunctionPropertyNames<AppSettingsModel>>;
 
 const instance = new AppSettingsModel();
 
