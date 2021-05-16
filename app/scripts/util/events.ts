@@ -4,6 +4,7 @@ interface EventSpec {
     'app-minimized': () => void;
     'app-maximized': () => void;
     'app-unmaximized': () => void;
+    'dark-mode-changed': (dark: boolean) => void;
 }
 
 class Events extends TypedEmitter<EventSpec> {
