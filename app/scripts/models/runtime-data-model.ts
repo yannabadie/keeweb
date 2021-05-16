@@ -34,9 +34,10 @@ class RuntimeDataModel extends Model {
         }
     }
 
-    private set(key: string, value: unknown) {
+    set(key: string, value: unknown): boolean {
         const thisRec = this as Record<string, unknown>;
         thisRec[key] = value;
+        return true;
     }
 
     async save() {

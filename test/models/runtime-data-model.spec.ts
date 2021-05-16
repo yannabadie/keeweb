@@ -13,6 +13,11 @@ describe('RuntimeDataModel', () => {
         expect(model.x).to.eql('xx');
         expect(RuntimeDataModel.toJSON()).to.eql({ x: 'xx' });
 
+        const isSet = RuntimeDataModel.set('x', 'y');
+        expect(isSet).to.eql(true);
+        expect(model.x).to.eql('y');
+        expect(RuntimeDataModel.toJSON()).to.eql({ x: 'y' });
+
         RuntimeDataModel.reset();
         expect(model.x).to.eql(undefined);
         expect(RuntimeDataModel.toJSON()).to.eql({});
