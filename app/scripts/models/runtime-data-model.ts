@@ -1,6 +1,9 @@
 import { Model } from 'util/model';
 import { SettingsStore } from 'comp/settings/settings-store';
 import { noop, omitEmpty } from 'util/fn';
+import { Logger } from 'util/logger';
+
+const logger = new Logger('runtime-data');
 
 let changeListener: () => void;
 
@@ -28,7 +31,9 @@ class RuntimeDataModel extends Model {
         if (data) {
             this.batchSet(() => {
                 for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
-                    this.set(key, value);
+                    if (!this.set(key, value)) {
+                        logger.warn('Bad property', key, value);
+                    }
                 }
             });
         }
