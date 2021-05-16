@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 enum Level {
     Off,
     Error,
@@ -18,13 +20,13 @@ const lastLogs: LogItem[] = [];
 
 class Logger {
     private readonly _prefix: string;
-    private _level: Level;
+    level: Level;
 
     static readonly Level = Level;
 
     constructor(name: string, id?: string, level = Level.All) {
         this._prefix = name ? name + (id ? ':' + id : '') : 'default';
-        this._level = level;
+        this.level = level;
     }
 
     ts(): number;
@@ -42,43 +44,35 @@ class Logger {
     }
 
     debug(...args: unknown[]): void {
-        args[0] = `${this.getPrefix()}${args[0]}`;
-        if (this._level >= Level.Debug) {
+        args[0] = `${this.getPrefix()}${String(args[0])}`;
+        if (this.level >= Level.Debug) {
             Logger.saveLast('debug', args);
-            console.log(...args); // eslint-disable-line no-console
+            console.log(...args);
         }
     }
 
     info(...args: unknown[]): void {
-        args[0] = `${this.getPrefix()}${args[0]}`;
-        if (this._level >= Level.Info) {
+        args[0] = `${this.getPrefix()}${String(args[0])}`;
+        if (this.level >= Level.Info) {
             Logger.saveLast('info', args);
-            console.info(...args); // eslint-disable-line no-console
+            console.info(...args);
         }
     }
 
     warn(...args: unknown[]): void {
-        args[0] = `${this.getPrefix()}${args[0]}`;
-        if (this._level >= Level.Warn) {
+        args[0] = `${this.getPrefix()}${String(args[0])}`;
+        if (this.level >= Level.Warn) {
             Logger.saveLast('warn', args);
-            console.warn(...args); // eslint-disable-line no-console
+            console.warn(...args);
         }
     }
 
     error(...args: unknown[]): void {
-        args[0] = `${this.getPrefix()}${args[0]}`;
-        if (this._level >= Level.Error) {
+        args[0] = `${this.getPrefix()}${String(args[0])}`;
+        if (this.level >= Level.Error) {
             Logger.saveLast('error', args);
-            console.error(...args); // eslint-disable-line no-console
+            console.error(...args);
         }
-    }
-
-    setLevel(level: Level): void {
-        this._level = level;
-    }
-
-    getLevel(): Level {
-        return this._level;
     }
 
     static saveLast(level: string, args: unknown[]): void {

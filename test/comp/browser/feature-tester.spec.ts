@@ -6,7 +6,7 @@ describe('FeatureTester', () => {
         try {
             await FeatureTester.test();
         } catch (e) {
-            expect.fail(`Not all features are supported. ${e}`);
+            expect.fail(`Not all features are supported. ${String(e)}`);
         }
     });
 });

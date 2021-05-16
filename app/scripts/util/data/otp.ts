@@ -44,7 +44,7 @@ class Otp {
 
         this.key = Otp.fromBase32(this.secret);
         if (!this.key) {
-            throw new Error(`Bad key: ${this.key}`);
+            throw new Error(`Bad secret: ${this.secret}`);
         }
     }
 
@@ -187,7 +187,7 @@ class Otp {
             throw new Error(`Bad digits: ${digits}`);
         }
         if (type === 'hotp' && !counter) {
-            throw new Error(`Bad counter: ${counter}`);
+            throw new Error(`Empty counter`);
         }
         if (period && period < 1) {
             throw new Error(`Bad period: ${period}`);

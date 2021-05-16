@@ -13,7 +13,10 @@ describe('PasswordStrength', () => {
         const actual = { onlyDigits: false, ...actualResult } as Record<string, unknown>;
 
         for (const [prop, expVal] of Object.entries(expected)) {
-            expect(actual[prop]).to.eql(expVal, `${prop} is ${expVal} for password "${password}"`);
+            expect(actual[prop]).to.eql(
+                expVal,
+                `${prop} is ${String(expVal)} for password "${password}"`
+            );
         }
     }
 
