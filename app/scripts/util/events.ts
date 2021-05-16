@@ -5,6 +5,9 @@ interface EventSpec {
     'app-maximized': () => void;
     'app-unmaximized': () => void;
     'dark-mode-changed': (dark: boolean) => void;
+    'before-user-idle': () => void;
+    'user-idle': () => void;
+    'power-monitor-resume': () => void;
 }
 
 class Events extends TypedEmitter<EventSpec> {
