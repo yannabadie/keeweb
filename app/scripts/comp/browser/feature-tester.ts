@@ -1,25 +1,28 @@
 import { Features } from 'util/features';
 
 const FeatureTester = {
-    test() {
+    async test(): Promise<void> {
         return Promise.resolve()
             .then(() => this.checkWebAssembly())
             .then(() => this.checkLocalStorage())
             .then(() => this.checkWebCrypto());
     },
 
-    checkWebAssembly() {
+    checkWebAssembly(): void {
         try {
             const module = new global.WebAssembly.Module(
                 Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00)
             );
-            return new global.WebAssembly.Instance(module) instanceof global.WebAssembly.Instance;
+            const instance = new global.WebAssembly.Instance(module);
+            if (!(instance instanceof global.WebAssembly.Instance)) {
+                throw new Error();
+            }
         } catch (e) {
-            throw 'WebAssembly is not supported';
+            throw new Error('WebAssembly is not supported');
         }
     },
 
-    checkLocalStorage() {
+    checkLocalStorage(): void {
         if (Features.isDesktop) {
             return;
         }
@@ -27,13 +30,13 @@ const FeatureTester = {
             localStorage.setItem('_test', '1');
             localStorage.removeItem('_test');
         } catch (e) {
-            throw 'LocalStorage is not supported';
+            throw new Error('LocalStorage is not supported');
         }
     },
 
-    checkWebCrypto() {
+    checkWebCrypto(): void {
         if (!global.crypto.subtle) {
-            throw 'WebCrypto is not supported';
+            throw new Error('WebCrypto is not supported');
         }
     }
 };

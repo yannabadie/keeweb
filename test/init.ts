@@ -16,6 +16,12 @@ const jsdom = new JSDOM('', { url: 'https://app.keeweb.info' }).window;
 
 global.crypto = new Crypto();
 global.localStorage = jsdom.localStorage;
+global.navigator = jsdom.navigator;
+global.screen = jsdom.screen;
+global.location = jsdom.location;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+global.window = jsdom.window;
 
 const DOMPurify = createDOMPurify(new JSDOM('').window as unknown as Window);
 createDOMPurify.sanitize = DOMPurify.sanitize.bind(DOMPurify);
