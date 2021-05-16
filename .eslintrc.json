@@ -182,6 +182,30 @@
             "format": ["camelCase", "PascalCase", "UPPER_CASE"],
             "leadingUnderscore": "forbid",
             "trailingUnderscore": "forbid"
+          },
+          {
+            "selector": ["method"],
+            "format": ["camelCase"],
+            "leadingUnderscore": "forbid",
+            "trailingUnderscore": "forbid"
+          },
+          {
+            "selector": ["class", "enum"],
+            "format": ["PascalCase"],
+            "leadingUnderscore": "forbid",
+            "trailingUnderscore": "forbid"
+          },
+          {
+            "selector": ["enumMember"],
+            "format": ["PascalCase"],
+            "leadingUnderscore": "forbid",
+            "trailingUnderscore": "forbid"
+          },
+          {
+            "selector": ["variable"],
+            "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+            "leadingUnderscore": "forbid",
+            "trailingUnderscore": "forbid"
           }
         ]
       },
