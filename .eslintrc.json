@@ -166,7 +166,24 @@
         "@typescript-eslint/explicit-module-boundary-types": "error",
         "@typescript-eslint/no-non-null-assertion": "error",
         "@typescript-eslint/restrict-template-expressions": "off",
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": ["objectLiteralProperty", "classProperty", "typeProperty"],
+            "modifiers": ["private", "protected"],
+            "format": ["camelCase"],
+            "leadingUnderscore": "require",
+            "trailingUnderscore": "forbid"
+          },
+          {
+            "selector": ["objectLiteralProperty", "classProperty", "typeProperty"],
+            "modifiers": ["public"],
+            "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+            "leadingUnderscore": "forbid",
+            "trailingUnderscore": "forbid"
+          }
+        ]
       },
       "parser": "@typescript-eslint/parser",
       "parserOptions": {

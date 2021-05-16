@@ -1,4 +1,5 @@
 import { Colors } from 'const/colors';
+import { StringFormat } from 'util/formatting/string-format';
 
 class Color {
     r = 0;
@@ -9,7 +10,7 @@ class Color {
     s = 0;
     l = 0;
 
-    private static readonly KnownColors = new Map<string, Color>(
+    private static readonly _knownColors = new Map<string, Color>(
         Object.entries(Colors.ColorsValues).map(([name, value]) => [name, new Color(value)])
     );
 
@@ -81,12 +82,7 @@ class Color {
     }
 
     toHex(): string {
-        return '#' + this.hex(this.r) + this.hex(this.g) + this.hex(this.b);
-    }
-
-    private hex(num: number): string {
-        const str = (num || 0).toString(16);
-        return str.length < 2 ? '0' + str : str;
+        return '#' + StringFormat.hex(this.r) + StringFormat.hex(this.g) + StringFormat.hex(this.b);
     }
 
     toRgba(): string {
@@ -120,7 +116,7 @@ class Color {
         }
         let selected: string | undefined,
             minDistance = Number.MAX_VALUE;
-        for (const [name, col] of Color.KnownColors) {
+        for (const [name, col] of Color._knownColors) {
             const distance = color.distanceTo(col);
             if (distance < minDistance) {
                 minDistance = distance;

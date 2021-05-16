@@ -33,5 +33,10 @@ export const StringFormat = {
 
     replaceVersion(str: string, replacement: string): string {
         return str.replace(/\d+\.\d+\.\d+/g, replacement);
+    },
+
+    hex(num: number): string {
+        const str = (num || 0).toString(16);
+        return str.length < 2 ? '0' + str : str;
     }
 };
