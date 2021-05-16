@@ -6,7 +6,7 @@ describe('AppSettingsModel', () => {
         AppSettingsModel.reset();
     });
 
-    it('sets an unknown setting', () => {
+    it('does not set an unknown setting', () => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const prop = 'unknown' as AppSettingsFieldName;
         expect(AppSettingsModel.set(prop, 'x')).eql(false);

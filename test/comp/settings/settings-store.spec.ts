@@ -8,15 +8,15 @@ describe('SettingsStore', () => {
     });
 
     it('loads json settings from localStorage', async () => {
-        localStorage.setItem('load', '{ "key": "loaded" }');
-        const value = await SettingsStore.load('load');
+        localStorage.setItem('loadFrom', '{ "key": "loaded" }');
+        const value = await SettingsStore.load('load-from');
         expect(value).to.eql({ key: 'loaded' });
-        localStorage.removeItem('load');
+        localStorage.removeItem('loadFrom');
     });
 
     it('saves json settings to localStorage', async () => {
-        await SettingsStore.save('save', { key: 'saved' });
-        expect(localStorage.getItem('save')).to.eql('{"key":"saved"}');
-        localStorage.removeItem('save');
+        await SettingsStore.save('save-to', { key: 'saved' });
+        expect(localStorage.getItem('saveTo')).to.eql('{"key":"saved"}');
+        localStorage.removeItem('saveTo');
     });
 });
