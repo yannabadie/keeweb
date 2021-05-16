@@ -45,7 +45,7 @@ describe('AppSettingsModel', () => {
     });
 
     it('sets all settings', () => {
-        const allSettings = {
+        const allSettings: Record<AppSettingsFieldName, unknown> = {
             theme: 'th',
             autoSwitchTheme: true,
             locale: 'loc',
