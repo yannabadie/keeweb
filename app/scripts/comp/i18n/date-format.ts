@@ -2,7 +2,7 @@ import { SettingsManager } from 'comp/settings/settings-manager';
 import { StringFormat } from 'util/formatting/string-format';
 
 const DateFormat = {
-    months() {
+    months(): string[] {
         const format = new Intl.DateTimeFormat(SettingsManager.activeLocale, { month: 'long' });
         const months = [];
         for (let month = 0; month < 12; month++) {
@@ -11,7 +11,7 @@ const DateFormat = {
         return months;
     },
 
-    weekDays() {
+    weekDays(): string[] {
         const format = new Intl.DateTimeFormat(SettingsManager.activeLocale, { weekday: 'long' });
         const weekdays = [];
         for (let day = 1; day < 8; day++) {
@@ -20,7 +20,7 @@ const DateFormat = {
         return weekdays;
     },
 
-    shortWeekDays() {
+    shortWeekDays(): string[] {
         const format = new Intl.DateTimeFormat(SettingsManager.activeLocale, { weekday: 'short' });
         const weekdays = [];
         for (let day = 1; day < 8; day++) {
@@ -29,7 +29,7 @@ const DateFormat = {
         return weekdays;
     },
 
-    dtStr(dt) {
+    dtStr(dt: Date | number): string {
         if (typeof dt === 'number') {
             dt = new Date(dt);
         }
@@ -41,7 +41,7 @@ const DateFormat = {
             : '';
     },
 
-    dStr(dt) {
+    dStr(dt: Date | number): string {
         if (typeof dt === 'number') {
             dt = new Date(dt);
         }
@@ -54,12 +54,12 @@ const DateFormat = {
             : '';
     },
 
-    dtStrFs(dt) {
+    dtStrFs(dt: Date | number): string {
         if (typeof dt === 'number') {
             dt = new Date(dt);
         }
         return dt
-            ? dt.getFullYear() +
+            ? dt.getFullYear().toString() +
                   '-' +
                   StringFormat.pad(dt.getMonth() + 1, 2) +
                   '-' +
