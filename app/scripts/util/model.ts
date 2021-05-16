@@ -1,4 +1,5 @@
 import { TypedEmitter } from 'tiny-typed-emitter';
+import { NonFunctionPropertyNames } from './types';
 
 export type ListenerSignature<EventSpec> = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,11 +64,6 @@ const ProxyDef: ProxyHandler<any> = {
 };
 
 /* eslint-enable */
-
-type NonFunctionPropertyNames<T> = {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    [K in keyof T]: T[K] extends Function ? never : K;
-}[keyof T];
 
 export class Model<EventSpec extends ListenerSignature<EventSpec> = DefaultModelEvents> {
     constructor() {

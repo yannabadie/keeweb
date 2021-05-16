@@ -1,12 +1,24 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// noinspection JSConstantReassignment
 
-const Module = require('module');
 import * as path from 'path';
 import * as fs from 'fs';
 import { Crypto } from '@peculiar/webcrypto';
+import { JSDOM } from 'jsdom';
+import createDOMPurify from 'dompurify';
+const Module = require('module');
 
-// noinspection JSConstantReassignment
+const jsdom = new JSDOM('', { url: 'https://app.keeweb.info' }).window;
+
 global.crypto = new Crypto();
+global.localStorage = jsdom.localStorage;
+
+const DOMPurify = createDOMPurify(new JSDOM('').window as unknown as Window);
+createDOMPurify.sanitize = DOMPurify.sanitize.bind(DOMPurify);
 
 const appBasePath = path.resolve(__dirname, '..', 'app');
 
@@ -18,12 +30,11 @@ const replacements = [
 ];
 
 const originalResolveFilename = Module._resolveFilename;
-Module._resolveFilename = function (request: string, _parent: any): string {
+Module._resolveFilename = function (request: string, ...rest: any[]): string {
     for (const { match, replace } of replacements) {
         request = request.replace(match, replace);
     }
-    arguments[0] = request;
-    return originalResolveFilename.apply(this, arguments);
+    return originalResolveFilename.call(this, request, ...rest);
 };
 
 function requireTextFile(filePath: string): () => { default: string } {
