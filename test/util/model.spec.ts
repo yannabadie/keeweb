@@ -75,7 +75,7 @@ describe('Model', () => {
         model.on('change', () => {
             changeEvents++;
         });
-        model.onPropChange('str', (val, prev) => {
+        model.onChange('str', (val, prev) => {
             changeStrEvents.push({ val, prev });
         });
 
@@ -94,7 +94,7 @@ describe('Model', () => {
         model.on('change', () => {
             changeEvents++;
         });
-        model.onPropChange('str', () => {
+        model.onChange('str', () => {
             changeStrEvents++;
         });
 
@@ -114,7 +114,7 @@ describe('Model', () => {
         model.on('change', () => {
             changeEvents++;
         });
-        model.onPropChange('strOpt', (val, prev) => {
+        model.onChange('strOpt', (val, prev) => {
             changeStrEvents.push({ val, prev });
         });
 
@@ -134,7 +134,7 @@ describe('Model', () => {
         model.on('change', () => {
             changeEvents++;
         });
-        model.onPropChange('strOpt', () => {
+        model.onChange('strOpt', () => {
             changeStrEvents++;
         });
 
@@ -154,7 +154,7 @@ describe('Model', () => {
         model.on('change', () => {
             changeEvents++;
         });
-        model.onPropChange('strOpt', () => {
+        model.onChange('strOpt', () => {
             changeStrEvents++;
         });
 
@@ -174,11 +174,11 @@ describe('Model', () => {
 
         model.on('my-event', eventFired);
         model.on('change', eventFired);
-        model.onPropChange('num', eventFired);
+        model.onChange('num', eventFired);
 
         model.off('my-event', eventFired);
         model.off('change', eventFired);
-        model.offPropChange('num', eventFired);
+        model.offChange('num', eventFired);
 
         model.num = 1;
         model.emitMyEvent('x');
@@ -202,16 +202,16 @@ describe('Model', () => {
         });
 
         const changedProps: string[] = [];
-        model.onPropChange('str', () => {
+        model.onChange('str', () => {
             changedProps.push('str');
         });
-        model.onPropChange('num', () => {
+        model.onChange('num', () => {
             changedProps.push('num');
         });
-        model.onPropChange('strOpt', () => {
+        model.onChange('strOpt', () => {
             changedProps.push('strOpt');
         });
-        model.onPropChange('numOpt', () => {
+        model.onChange('numOpt', () => {
             changedProps.push('numOpt');
         });
 
@@ -240,10 +240,10 @@ describe('Model', () => {
         model.on('change', () => {
             changed++;
         });
-        model.onPropChange('str', () => {
+        model.onChange('str', () => {
             changedProps.push('str');
         });
-        model.onPropChange('num', () => {
+        model.onChange('num', () => {
             changedProps.push('num');
         });
 
@@ -277,10 +277,10 @@ describe('Model', () => {
         let changed = 0;
 
         model.on('change', () => changed++);
-        model.onPropChange('str', () => changed++);
-        model.onPropChange('num', () => changed++);
-        model.onPropChange('strOpt', () => changed++);
-        model.onPropChange('numOpt', () => changed++);
+        model.onChange('str', () => changed++);
+        model.onChange('num', () => changed++);
+        model.onChange('strOpt', () => changed++);
+        model.onChange('numOpt', () => changed++);
 
         model.batchSet(
             () => {
@@ -330,8 +330,8 @@ describe('Model', () => {
         let changed = 0;
         const changedProps: string[] = [];
         model.on('change', () => changed++);
-        model.onPropChange('der', () => changedProps.push('der'));
-        model.onPropChange('str', () => changedProps.push('str'));
+        model.onChange('der', () => changedProps.push('der'));
+        model.onChange('str', () => changedProps.push('str'));
 
         expect(model.der).to.eql('derived');
         expect(model.str).to.eql('s');
@@ -356,7 +356,7 @@ describe('Model', () => {
         let changed = 0;
         let changedProps = 0;
         model.on('change', () => changed++);
-        model.onPropChange('prop', () => changedProps++);
+        model.onChange('prop', () => changedProps++);
 
         model.prop = 'changed';
 

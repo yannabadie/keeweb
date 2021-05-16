@@ -22,7 +22,7 @@ const SymbolEmitter = Symbol('emitter');
 
 function emitPropChange(target: Model, prop: string, value: unknown, prevValue: unknown) {
     const emitter = target[SymbolEmitter] as ModelTypedEmitter;
-    if (emitter) {
+    if (emitter && !prop.startsWith('_')) {
         if (!emitter.silent) {
             emitter.emit(`change:${prop}`, value, prevValue);
             if (emitter.batchSet) {
@@ -71,7 +71,7 @@ export class Model<EventSpec extends ListenerSignature<EventSpec> = DefaultModel
         return new Proxy(this, ProxyDef);
     }
 
-    [SymbolEmitter]: TypedEmitter<EventSpec>;
+    private [SymbolEmitter]: TypedEmitter<EventSpec>;
 
     private emitter(): TypedEmitter<EventSpec> {
         let emitter = this[SymbolEmitter];
@@ -107,7 +107,7 @@ export class Model<EventSpec extends ListenerSignature<EventSpec> = DefaultModel
         return this;
     }
 
-    onPropChange<PropName extends NonFunctionPropertyNames<this>>(
+    onChange<PropName extends NonFunctionPropertyNames<this>>(
         prop: PropName,
         listener: (value: this[PropName], prevValue: this[PropName]) => void
     ): this {
@@ -116,7 +116,7 @@ export class Model<EventSpec extends ListenerSignature<EventSpec> = DefaultModel
         return this;
     }
 
-    offPropChange(prop: NonFunctionPropertyNames<this>, listener: () => void): this {
+    offChange(prop: NonFunctionPropertyNames<this>, listener: () => void): this {
         const emitter = this.emitter() as TypedEmitter;
         emitter.off(`change:${prop}`, listener);
         return this;
