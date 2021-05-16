@@ -8,6 +8,8 @@ interface EventSpec {
     'before-user-idle': () => void;
     'user-idle': () => void;
     'power-monitor-resume': () => void;
+    'theme-applied': () => void;
+    'set-locale': (locale: string) => void;
 }
 
 class Events extends TypedEmitter<EventSpec> {

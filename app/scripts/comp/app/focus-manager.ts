@@ -7,9 +7,9 @@ const logger = new Logger(
 );
 
 const FocusManager = {
-    modal: null,
+    modal: undefined as string | undefined,
 
-    setModal(modal) {
+    setModal(modal: string | undefined): void {
         this.modal = modal;
         logger.debug('Set modal', modal);
     }

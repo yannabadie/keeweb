@@ -1,17 +1,36 @@
-import { Events } from 'framework/events';
+import { Events } from 'util/events';
 import { Features } from 'util/features';
 import { Locale } from 'util/locale';
 import { ThemeWatcher } from 'comp/browser/theme-watcher';
 import { AppSettingsModel } from 'models/app-settings-model';
 import { Logger } from 'util/logger';
 import { Launcher } from 'comp/launcher';
+import { noop } from 'util/fn';
 
 const logger = new Logger('settings-manager');
 
+const DesktopLocaleKeys = [
+    'sysMenuAboutKeeWeb',
+    'sysMenuServices',
+    'sysMenuHide',
+    'sysMenuHideOthers',
+    'sysMenuUnhide',
+    'sysMenuQuit',
+    'sysMenuEdit',
+    'sysMenuUndo',
+    'sysMenuRedo',
+    'sysMenuCut',
+    'sysMenuCopy',
+    'sysMenuPaste',
+    'sysMenuSelectAll',
+    'sysMenuWindow',
+    'sysMenuMinimize',
+    'sysMenuClose'
+];
+
 const SettingsManager = {
-    neutralLocale: null,
     activeLocale: 'en-US',
-    activeTheme: null,
+    activeTheme: null as string | null,
 
     allLocales: {
         'en-US': 'English',
@@ -68,13 +87,13 @@ const SettingsManager = {
         }
     ],
 
-    customLocales: {},
+    customLocales: new Map<string, Record<string, string>>(),
 
-    init() {
+    init(): void {
         Events.on('dark-mode-changed', () => this.darkModeChanged());
     },
 
-    setBySettings() {
+    setBySettings(): void {
         this.setTheme(AppSettingsModel.theme);
         this.setFontSize(AppSettingsModel.fontSize);
         const locale = AppSettingsModel.locale;
@@ -87,11 +106,11 @@ const SettingsManager = {
         } catch (ex) {}
     },
 
-    getDefaultTheme() {
+    getDefaultTheme(): string {
         return 'dark';
     },
 
-    setTheme(theme) {
+    setTheme(theme: string | undefined | null): void {
         if (!theme) {
             if (this.activeTheme) {
                 return;
@@ -107,7 +126,9 @@ const SettingsManager = {
             theme = this.selectDarkOrLightTheme(theme);
         }
         document.body.classList.add(this.getThemeClass(theme));
-        const metaThemeColor = document.head.querySelector('meta[name=theme-color]');
+        const metaThemeColor = document.head.querySelector('meta[name=theme-color]') as
+            | HTMLMetaElement
+            | undefined;
         if (metaThemeColor) {
             metaThemeColor.content = window.getComputedStyle(document.body).backgroundColor;
         }
@@ -116,11 +137,11 @@ const SettingsManager = {
         Events.emit('theme-applied');
     },
 
-    getThemeClass(theme) {
+    getThemeClass(theme: string): string {
         return 'th-' + theme;
     },
 
-    selectDarkOrLightTheme(theme) {
+    selectDarkOrLightTheme(theme: string): string {
         for (const config of this.autoSwitchedThemes) {
             if (config.light === theme || config.dark === theme) {
                 return ThemeWatcher.dark ? config.dark : config.light;
@@ -129,7 +150,7 @@ const SettingsManager = {
         return theme;
     },
 
-    darkModeChanged() {
+    darkModeChanged(): void {
         if (AppSettingsModel.autoSwitchTheme) {
             for (const config of this.autoSwitchedThemes) {
                 if (config.light === this.activeTheme || config.dark === this.activeTheme) {
@@ -142,46 +163,37 @@ const SettingsManager = {
         }
     },
 
-    setFontSize(fontSize) {
+    setFontSize(fontSize: number): void {
         const defaultFontSize = Features.isMobile ? 14 : 12;
-        document.documentElement.style.fontSize = defaultFontSize + (fontSize || 0) * 2 + 'px';
+        const sizeInPx = defaultFontSize + (fontSize || 0) * 2;
+        document.documentElement.style.fontSize = `${sizeInPx}px`;
     },
 
-    setLocale(loc) {
+    setLocale(loc: string | undefined | null): void {
         if (!loc || loc === this.activeLocale) {
             return;
         }
         let localeValues;
         if (loc !== 'en-US') {
-            if (this.customLocales[loc]) {
-                localeValues = this.customLocales[loc];
-            } else {
-                localeValues = require('locales/' + loc + '.json');
+            localeValues = this.customLocales.get(loc);
+            if (!localeValues) {
+                localeValues = require('locales/' + loc + '.json') as Record<string, string>;
             }
         }
-        if (!this.neutralLocale) {
-            this.neutralLocale = { ...Locale };
-        }
-        Object.assign(Locale, this.neutralLocale, localeValues);
+        Locale.set(localeValues);
         this.activeLocale = loc;
         Events.emit('set-locale', loc);
 
         if (Launcher) {
-            const { ipcRenderer } = Launcher.electron();
-            const localeValuesForDesktopApp = {};
-            for (const [key, value] of Object.entries(Locale)) {
-                if (key.startsWith('sysMenu')) {
-                    localeValuesForDesktopApp[key] = value;
-                }
+            const localeValuesForDesktopApp: Record<string, string> = {};
+            for (const key of DesktopLocaleKeys) {
+                localeValuesForDesktopApp[key] = Locale.get(key);
             }
-            ipcRenderer.invoke('setLocale', {
-                locale: loc,
-                ...localeValuesForDesktopApp
-            });
+            Launcher.ipcRenderer.invoke('set-locale', loc, localeValuesForDesktopApp).catch(noop);
         }
     },
 
-    getBrowserLocale() {
+    getBrowserLocale(): string {
         const language = (navigator.languages && navigator.languages[0]) || navigator.language;
         if (language && language.startsWith('en')) {
             return 'en-US';
