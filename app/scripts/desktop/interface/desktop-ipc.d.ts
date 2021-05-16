@@ -1,0 +1,1 @@
+../../../../desktop/interface/desktop-ipc.d.ts
