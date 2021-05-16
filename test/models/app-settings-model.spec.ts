@@ -137,17 +137,17 @@ describe('AppSettingsModel', () => {
     });
 
     it('loads settings and saves them on change', async () => {
-        localStorage.setItem('appSettings', '{ "theme":"x" }');
+        localStorage.setItem('appSettings', '{ "theme": "x" }');
 
         expect(AppSettingsModel.theme).to.eql(null);
 
         await AppSettingsModel.init();
 
         expect(AppSettingsModel.theme).to.eql('x');
-        expect(localStorage.getItem('appSettings')).to.eql('{ "theme":"x" }');
+        expect(localStorage.getItem('appSettings')).to.eql('{ "theme": "x" }');
 
         AppSettingsModel.theme = 'x';
-        expect(localStorage.getItem('appSettings')).to.eql('{ "theme":"x" }');
+        expect(localStorage.getItem('appSettings')).to.eql('{ "theme": "x" }');
 
         AppSettingsModel.theme = 'y';
         expect(localStorage.getItem('appSettings')).to.eql('{"theme":"y"}');

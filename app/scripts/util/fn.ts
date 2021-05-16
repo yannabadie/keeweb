@@ -52,6 +52,8 @@ export function omit(
     return result;
 }
 
+export function omitEmpty(obj: undefined): undefined;
+export function omitEmpty(obj: Record<string, unknown>): Record<string, unknown>;
 export function omitEmpty(
     obj: Record<string, unknown> | undefined
 ): Record<string, unknown> | undefined {
@@ -59,7 +61,7 @@ export function omitEmpty(
         return obj;
     }
     return Object.entries(obj).reduce((result, [key, value]) => {
-        if (value) {
+        if (value !== undefined && value !== null) {
             result[key] = value;
         }
         return result;
