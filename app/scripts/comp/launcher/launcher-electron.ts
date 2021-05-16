@@ -8,7 +8,7 @@ import {
     DesktopIpcRendererEvents,
     DesktopIpcMainEvents,
     DesktopIpcMainCalls
-} from 'desktop/interface/desktop-ipc';
+} from 'desktop/desktop-ipc';
 
 // const logger = new Logger('launcher');
 
