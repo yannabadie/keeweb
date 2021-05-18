@@ -1,7 +1,7 @@
 // import { Events } from 'util/events';
 // import { StartProfiler } from 'comp/app/start-profiler';
 // import { RuntimeInfo } from 'const/runtime-info';
-// import { Logger } from 'util/logger';
+import { Logger } from 'util/logger';
 import { noop } from 'util/fn';
 import * as electron from 'electron';
 import {
@@ -35,6 +35,13 @@ type TypedIpcRenderer = {
 export class LauncherElectron {
     name = 'electron';
     version = process.versions.electron;
+
+    constructor() {
+        this.ipcRenderer.on('log', (e, name, level, ...args) => {
+            const logger = new Logger(name);
+            logger[level](...args);
+        });
+    }
 
     get platform(): NodeJS.Platform {
         return process.platform;

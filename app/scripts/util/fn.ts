@@ -94,3 +94,7 @@ export function isEqual<T>(a: T, b: T): boolean {
 export function minmax(val: number, min: number, max: number): number {
     return Math.min(max, Math.max(min, val));
 }
+
+export function unreachable(msg: string, arg: never): never {
+    throw new Error(`${msg}: ${String(arg)}`);
+}

@@ -10,6 +10,7 @@ interface EventSpec {
     'power-monitor-resume': () => void;
     'theme-applied': () => void;
     'set-locale': (locale: string) => void;
+    'native-modules-yubikeys': (numYubiKeys: number) => void;
 }
 
 class Events extends TypedEmitter<EventSpec> {
