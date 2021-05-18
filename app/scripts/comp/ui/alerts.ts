@@ -1,8 +1,29 @@
 import { Locale } from 'util/locale';
-import { ModalView } from 'views/modal-view';
 
-const Alerts = {
-    alertDisplayed: false,
+export interface AlertButton {
+    result: string;
+    title: string;
+}
+
+export interface AlertConfig {
+    header: string;
+    body: string;
+    icon?: string;
+    buttons?: AlertButton[];
+    esc?: string;
+    click?: string;
+    enter?: string;
+    skipIfAlertDisplayed?: boolean;
+}
+
+type AlertResult = string | undefined;
+
+const alertDisplayed = false;
+
+export const Alerts = {
+    get alertDisplayed(): boolean {
+        return alertDisplayed;
+    },
 
     buttons: {
         ok: {
@@ -41,34 +62,35 @@ const Alerts = {
                 return Locale.alertDeny;
             }
         }
-    },
+    } as Record<string, AlertButton>,
 
-    alert(config) {
+    alert(config: AlertConfig): Promise<AlertResult> {
         if (config.skipIfAlertDisplayed && Alerts.alertDisplayed) {
-            return null;
+            return Promise.resolve(undefined);
         }
-        Alerts.alertDisplayed = true;
-        const view = new ModalView(config);
-        view.render();
-        view.once('result', (res, check) => {
-            if (res && config.success) {
-                config.success(res, check);
-            }
-            if (!res && config.cancel) {
-                config.cancel();
-            }
-            if (config.complete) {
-                config.complete(res, check);
-            }
-        });
-        view.on('will-close', () => {
-            Alerts.alertDisplayed = false;
-        });
-        return view;
+        return Promise.reject('Not implemented');
+        // Alerts.alertDisplayed = true;
+        // const view = new ModalView(config);
+        // view.render();
+        // view.once('result', (res, check) => {
+        //     if (res && config.success) {
+        //         config.success(res, check);
+        //     }
+        //     if (!res && config.cancel) {
+        //         config.cancel();
+        //     }
+        //     if (config.complete) {
+        //         config.complete(res, check);
+        //     }
+        // });
+        // view.on('will-close', () => {
+        //     Alerts.alertDisplayed = false;
+        // });
+        // return view;
     },
 
-    notImplemented() {
-        this.alert({
+    notImplemented(): Promise<AlertResult> {
+        return this.alert({
             header: Locale.notImplemented,
             body: '',
             icon: 'exclamation-triangle',
@@ -79,10 +101,8 @@ const Alerts = {
         });
     },
 
-    info(config) {
-        this.alert({
-            header: '',
-            body: '',
+    info(config: AlertConfig): Promise<AlertResult> {
+        return this.alert({
             icon: 'info',
             buttons: [this.buttons.ok],
             esc: '',
@@ -92,10 +112,8 @@ const Alerts = {
         });
     },
 
-    error(config) {
-        this.alert({
-            header: '',
-            body: '',
+    error(config: AlertConfig): Promise<AlertResult> {
+        return this.alert({
             icon: 'exclamation-circle',
             buttons: [this.buttons.ok],
             esc: '',
@@ -105,10 +123,8 @@ const Alerts = {
         });
     },
 
-    yesno(config) {
-        this.alert({
-            header: '',
-            body: '',
+    yesno(config: AlertConfig): Promise<AlertResult> {
+        return this.alert({
             icon: 'question',
             buttons: [this.buttons.yes, this.buttons.no],
             esc: '',
@@ -118,5 +134,3 @@ const Alerts = {
         });
     }
 };
-
-export { Alerts };
