@@ -178,7 +178,7 @@
           {
             "selector": ["objectLiteralProperty", "classProperty", "typeProperty"],
             "modifiers": ["public"],
-            "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+            "format": ["camelCase", "PascalCase", "UPPER_CASE", "snake_case"],
             "leadingUnderscore": "forbid",
             "trailingUnderscore": "forbid"
           },

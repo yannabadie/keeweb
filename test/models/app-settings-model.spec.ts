@@ -79,6 +79,26 @@ describe('AppSettingsModel', () => {
             demoOpened: true,
             fontSize: 1,
             tableViewColumns: ['x', 'y', 'z'],
+            generatorPresets: {
+                default: 'xxx',
+                disabled: { 'dis': true },
+                user: [
+                    {
+                        name: 'user-name',
+                        title: 'user-title',
+                        length: 1,
+                        pattern: 'pat',
+                        include: 'xyz',
+                        upper: true,
+                        lower: false,
+                        digits: true,
+                        special: false,
+                        brackets: true,
+                        high: false,
+                        ambiguous: true
+                    }
+                ]
+            },
             generatorHidePassword: true,
             cacheConfigSettings: true,
             allowIframes: true,

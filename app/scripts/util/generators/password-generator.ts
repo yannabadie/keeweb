@@ -3,7 +3,14 @@ import 'util/kdbxweb/protected-value';
 import { phonetic } from 'util/generators/phonetic';
 import { shuffle } from 'util/fn';
 
-type CharRange = 'upper' | 'lower' | 'digits' | 'special' | 'brackets' | 'high' | 'ambiguous';
+export type CharRange =
+    | 'upper'
+    | 'lower'
+    | 'digits'
+    | 'special'
+    | 'brackets'
+    | 'high'
+    | 'ambiguous';
 
 export const CharRanges: Record<CharRange, string> = {
     upper: 'ABCDEFGHJKLMNPQRSTUVWXYZ',
@@ -25,7 +32,7 @@ const DefaultCharRangesByPattern = {
     '0': CharRanges.ambiguous
 };
 
-type PasswordGeneratorOptions = {
+export interface PasswordGeneratorOptions {
     length: number;
     name?: string;
     pattern?: string;
@@ -38,7 +45,26 @@ type PasswordGeneratorOptions = {
     brackets?: boolean;
     high?: boolean;
     ambiguous?: boolean;
-};
+}
+
+export interface PasswordGeneratorCustomPreset extends PasswordGeneratorOptions {
+    name: string;
+    title: string;
+}
+
+export interface PasswordGeneratorPreset extends PasswordGeneratorOptions {
+    name: string;
+    title: string;
+    builtIn?: boolean;
+    disabled?: boolean;
+    default?: boolean;
+}
+
+export interface PasswordGeneratorAppSetting {
+    default?: string;
+    user: PasswordGeneratorCustomPreset[];
+    disabled: Record<string, boolean>;
+}
 
 export const PasswordGenerator = {
     generate(opts: PasswordGeneratorOptions): string {

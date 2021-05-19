@@ -9,6 +9,8 @@ export const DropboxApps = {
     FullDropbox: { id: 'eor7hvv6u6oslq9', secret: 'ez04o1iwf6yprq3' }
 } as const;
 
+export const DropboxChooserAppKey = 'qp7ctun6qt5n9d6';
+
 export const GDriveApps = {
     Local: {
         id: '783608538594-36tkdh8iscrq8t8dq87gghubnhivhjp5.apps.googleusercontent.com',

@@ -3,6 +3,12 @@ import { SettingsStore } from 'comp/settings/settings-store';
 import { noop } from 'util/fn';
 import { Logger } from 'util/logger';
 import { NonFunctionPropertyNames } from 'util/types';
+import {
+    CharRange,
+    CharRanges,
+    PasswordGeneratorAppSetting,
+    PasswordGeneratorCustomPreset
+} from 'util/generators/password-generator';
 
 const logger = new Logger('app-settings');
 
@@ -42,7 +48,7 @@ class AppSettingsModel extends Model {
     demoOpened = false; // hide the demo button inside the More... menu
     fontSize: 0 | 1 | 2 = 0; // font size
     tableViewColumns: string[] | null = null; // columns displayed in the table view
-    // generatorPresets: unknown = null; // presets used in the password generator
+    generatorPresets: PasswordGeneratorAppSetting | null = null; // presets used in the password generator
     generatorHidePassword = false; // hide password in the generator
     cacheConfigSettings = false; // cache config settings and use them if the config can't be loaded
     allowIframes = false; // allow displaying the app in IFrames
@@ -232,8 +238,8 @@ class AppSettingsModel extends Model {
                 return setFontSize(instance, value);
             case 'tableViewColumns':
                 return setTableViewColumns(instance, value);
-            // case 'generatorPresets':
-            //     return false;
+            case 'generatorPresets':
+                return setGeneratorPresets(instance, value);
             case 'generatorHidePassword':
                 return setBoolean(instance, 'generatorHidePassword', value);
             case 'cacheConfigSettings':
@@ -507,6 +513,76 @@ function setWebdavSaveMethod(instance: AppSettingsModel, value: unknown) {
         return true;
     }
     return false;
+}
+
+function setGeneratorPresets(instance: AppSettingsModel, value: unknown) {
+    if (!value) {
+        instance.generatorPresets = null;
+        return true;
+    }
+    if (typeof value !== 'object' || Array.isArray(value)) {
+        return false;
+    }
+
+    let defaultPreset: string | undefined;
+    const disabled: Record<string, boolean> = {};
+    const user: PasswordGeneratorCustomPreset[] = [];
+
+    const record = value as Record<string, unknown>;
+    if (typeof record.default === 'string') {
+        defaultPreset = record.default;
+    }
+    if (record.disabled && typeof record.disabled === 'object' && !Array.isArray(record.disabled)) {
+        const disabledRecord = record.disabled as Record<string, unknown>;
+        for (const [preset, isDisabled] of Object.entries(disabledRecord)) {
+            disabled[preset] = !!isDisabled;
+        }
+    }
+    if (Array.isArray(record.user)) {
+        for (const item of record.user as unknown[]) {
+            if (!item || typeof item !== 'object' || Array.isArray(item)) {
+                continue;
+            }
+            const itemRecord = item as Record<string, unknown>;
+            if (!itemRecord.name || typeof itemRecord.name !== 'string') {
+                continue;
+            }
+            if (!itemRecord.title || typeof itemRecord.title !== 'string') {
+                continue;
+            }
+            if (!itemRecord.length || typeof itemRecord.length !== 'number') {
+                continue;
+            }
+            const customPreset: PasswordGeneratorCustomPreset = {
+                name: itemRecord.name,
+                title: itemRecord.title,
+                length: itemRecord.length
+            };
+            user.push(customPreset);
+
+            if (typeof itemRecord.include === 'string') {
+                customPreset.include = itemRecord.include;
+            }
+            if (typeof itemRecord.pattern === 'string') {
+                customPreset.pattern = itemRecord.pattern;
+            }
+            for (const prop of Object.keys(CharRanges)) {
+                const charRange = prop as CharRange;
+                const enabled = itemRecord[charRange];
+                if (typeof enabled === 'boolean') {
+                    customPreset[charRange] = enabled;
+                }
+            }
+        }
+    }
+
+    instance.generatorPresets = {
+        default: defaultPreset,
+        user,
+        disabled
+    };
+
+    return true;
 }
 
 type AppSettingsFieldName = NonFunctionPropertyNames<AppSettingsModel>;
