@@ -6,6 +6,14 @@ describe('RuntimeDataModel', () => {
         RuntimeDataModel.reset();
     });
 
+    it('sets an known property', () => {
+        RuntimeDataModel.skipFolderRightsWarning = true;
+        expect(RuntimeDataModel.skipFolderRightsWarning).to.eql(true);
+
+        RuntimeDataModel.reset();
+        expect(RuntimeDataModel.skipFolderRightsWarning).to.eql(undefined);
+    });
+
     it('sets an unknown property', () => {
         const model = RuntimeDataModel as unknown as Record<string, unknown>;
 
