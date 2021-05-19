@@ -52,4 +52,6 @@ export interface DesktopIpcMainCalls {
     'save-config': (name: string, data: string) => string;
     'is-app-focused': () => boolean;
     'set-global-shortcuts': (shortcuts: DesktopShortcutsSettings) => void;
+    'get-temp-path': () => string | undefined;
+    'resolve-proxy': (url: string) => { host: string; port: string } | undefined;
 }
