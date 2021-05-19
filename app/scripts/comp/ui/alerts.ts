@@ -32,8 +32,15 @@ export class Alert {
         throw new Error('Not implemented');
     }
 
-    closeWithResult(result: string) {
+    closeWithResult(result: string): void {
         this.result = result;
+        throw new Error('Not implemented');
+    }
+
+    closeImmediate(): void {}
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    change(config: { header?: string }): void {
         throw new Error('Not implemented');
     }
 }

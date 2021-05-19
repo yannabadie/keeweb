@@ -20,6 +20,8 @@ interface EventSpec {
     'keypress-modal': (e: KeyboardEvent, modal: string) => void;
     'popup-opened': (win: Window) => void;
     'popup-closed': (win: Window, location?: string) => void;
+    'qr-url-read': (url: string) => void;
+    'qr-enter-manually': () => void;
 }
 
 class Events extends TypedEmitter<EventSpec> {
