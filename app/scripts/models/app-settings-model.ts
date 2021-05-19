@@ -2,7 +2,7 @@ import { Model } from 'util/model';
 import { SettingsStore } from 'comp/settings/settings-store';
 import { noop } from 'util/fn';
 import { Logger } from 'util/logger';
-import { NonFunctionPropertyNames } from 'util/types';
+import { BooleanPropertyNames, NonFunctionPropertyNames } from 'util/types';
 import {
     CharRange,
     CharRanges,
@@ -173,171 +173,171 @@ class AppSettingsModel extends Model {
     private setInternal(key: NonFunctionPropertyNames<AppSettingsModel>, value: unknown): boolean {
         switch (key) {
             case 'theme':
-                return setOptionalString(this, 'theme', value);
+                return this.setOptionalString('theme', value);
             case 'autoSwitchTheme':
-                return setBoolean(this, 'autoSwitchTheme', value);
+                return this.setBoolean('autoSwitchTheme', value);
             case 'locale':
-                return setOptionalString(this, 'locale', value);
+                return this.setOptionalString('locale', value);
             case 'expandGroups':
-                return setBoolean(this, 'expandGroups', value);
+                return this.setBoolean('expandGroups', value);
             case 'listViewWidth':
-                return setOptionalPositiveNumber(this, 'listViewWidth', value);
+                return this.setOptionalPositiveNumber('listViewWidth', value);
             case 'menuViewWidth':
-                return setOptionalPositiveNumber(this, 'menuViewWidth', value);
+                return this.setOptionalPositiveNumber('menuViewWidth', value);
             case 'tagsViewHeight':
-                return setOptionalPositiveNumber(this, 'tagsViewHeight', value);
+                return this.setOptionalPositiveNumber('tagsViewHeight', value);
             case 'autoUpdate':
-                return setAutoUpdate(this, value);
+                return this.setAutoUpdate(value);
             case 'clipboardSeconds':
-                return setNonNegativeNumber(this, 'clipboardSeconds', value);
+                return this.setNonNegativeNumber('clipboardSeconds', value);
             case 'autoSave':
-                return setBoolean(instance, 'autoSave', value);
+                return this.setBoolean('autoSave', value);
             case 'autoSaveInterval':
-                return setNumberWithMinus1(instance, 'autoSaveInterval', value);
+                return this.setNumberWithMinus1('autoSaveInterval', value);
             case 'rememberKeyFiles':
-                return setRememberKeyFiles(instance, value);
+                return this.setRememberKeyFiles(value);
             case 'idleMinutes':
-                return setNonNegativeNumber(instance, 'idleMinutes', value);
+                return this.setNonNegativeNumber('idleMinutes', value);
             case 'minimizeOnClose':
-                return setBoolean(instance, 'minimizeOnClose', value);
+                return this.setBoolean('minimizeOnClose', value);
             case 'minimizeOnFieldCopy':
-                return setBoolean(instance, 'minimizeOnFieldCopy', value);
+                return this.setBoolean('minimizeOnFieldCopy', value);
             case 'tableView':
-                return setBoolean(instance, 'tableView', value);
+                return this.setBoolean('tableView', value);
             case 'colorfulIcons':
-                return setBoolean(instance, 'colorfulIcons', value);
+                return this.setBoolean('colorfulIcons', value);
             case 'useMarkdown':
-                return setBoolean(instance, 'useMarkdown', value);
+                return this.setBoolean('useMarkdown', value);
             case 'directAutotype':
-                return setBoolean(instance, 'directAutotype', value);
+                return this.setBoolean('directAutotype', value);
             case 'autoTypeTitleFilterEnabled':
-                return setBoolean(instance, 'autoTypeTitleFilterEnabled', value);
+                return this.setBoolean('autoTypeTitleFilterEnabled', value);
             case 'titlebarStyle':
-                return setTitlebarStyle(instance, value);
+                return this.setTitlebarStyle(value);
             case 'lockOnMinimize':
-                return setBoolean(instance, 'lockOnMinimize', value);
+                return this.setBoolean('lockOnMinimize', value);
             case 'lockOnCopy':
-                return setBoolean(instance, 'lockOnCopy', value);
+                return this.setBoolean('lockOnCopy', value);
             case 'lockOnAutoType':
-                return setBoolean(instance, 'lockOnAutoType', value);
+                return this.setBoolean('lockOnAutoType', value);
             case 'lockOnOsLock':
-                return setBoolean(instance, 'lockOnOsLock', value);
+                return this.setBoolean('lockOnOsLock', value);
             case 'helpTipCopyShown':
-                return setBoolean(instance, 'helpTipCopyShown', value);
+                return this.setBoolean('helpTipCopyShown', value);
             case 'templateHelpShown':
-                return setBoolean(instance, 'templateHelpShown', value);
+                return this.setBoolean('templateHelpShown', value);
             case 'skipOpenLocalWarn':
-                return setBoolean(instance, 'skipOpenLocalWarn', value);
+                return this.setBoolean('skipOpenLocalWarn', value);
             case 'hideEmptyFields':
-                return setBoolean(instance, 'hideEmptyFields', value);
+                return this.setBoolean('hideEmptyFields', value);
             case 'skipHttpsWarning':
-                return setBoolean(instance, 'skipHttpsWarning', value);
+                return this.setBoolean('skipHttpsWarning', value);
             case 'demoOpened':
-                return setBoolean(instance, 'demoOpened', value);
+                return this.setBoolean('demoOpened', value);
             case 'fontSize':
-                return setFontSize(instance, value);
+                return this.setFontSize(value);
             case 'tableViewColumns':
-                return setTableViewColumns(instance, value);
+                return this.setTableViewColumns(value);
             case 'generatorPresets':
-                return setGeneratorPresets(instance, value);
+                return this.setGeneratorPresets(value);
             case 'generatorHidePassword':
-                return setBoolean(instance, 'generatorHidePassword', value);
+                return this.setBoolean('generatorHidePassword', value);
             case 'cacheConfigSettings':
-                return setBoolean(instance, 'cacheConfigSettings', value);
+                return this.setBoolean('cacheConfigSettings', value);
             case 'allowIframes':
-                return setBoolean(instance, 'allowIframes', value);
+                return this.setBoolean('allowIframes', value);
             case 'useGroupIconForEntries':
-                return setBoolean(instance, 'useGroupIconForEntries', value);
+                return this.setBoolean('useGroupIconForEntries', value);
             case 'enableUsb':
-                return setBoolean(instance, 'enableUsb', value);
+                return this.setBoolean('enableUsb', value);
             case 'fieldLabelDblClickAutoType':
-                return setBoolean(instance, 'fieldLabelDblClickAutoType', value);
+                return this.setBoolean('fieldLabelDblClickAutoType', value);
             case 'auditPasswords':
-                return setBoolean(instance, 'auditPasswords', value);
+                return this.setBoolean('auditPasswords', value);
             case 'auditPasswordEntropy':
-                return setBoolean(instance, 'auditPasswordEntropy', value);
+                return this.setBoolean('auditPasswordEntropy', value);
             case 'excludePinsFromAudit':
-                return setBoolean(instance, 'excludePinsFromAudit', value);
+                return this.setBoolean('excludePinsFromAudit', value);
             case 'checkPasswordsOnHIBP':
-                return setBoolean(instance, 'checkPasswordsOnHIBP', value);
+                return this.setBoolean('checkPasswordsOnHIBP', value);
             case 'auditPasswordAge':
-                return setNonNegativeNumber(instance, 'auditPasswordAge', value);
+                return this.setNonNegativeNumber('auditPasswordAge', value);
             case 'deviceOwnerAuth':
-                return setDeviceOwnerAuth(instance, value);
+                return this.setDeviceOwnerAuth(value);
             case 'deviceOwnerAuthTimeoutMinutes':
-                return setNonNegativeNumber(instance, 'deviceOwnerAuthTimeoutMinutes', value);
+                return this.setNonNegativeNumber('deviceOwnerAuthTimeoutMinutes', value);
             case 'disableOfflineStorage':
-                return setBoolean(instance, 'disableOfflineStorage', value);
+                return this.setBoolean('disableOfflineStorage', value);
             case 'shortLivedStorageToken':
-                return setBoolean(instance, 'shortLivedStorageToken', value);
+                return this.setBoolean('shortLivedStorageToken', value);
             case 'extensionFocusIfLocked':
-                return setBoolean(instance, 'extensionFocusIfLocked', value);
+                return this.setBoolean('extensionFocusIfLocked', value);
             case 'extensionFocusIfEmpty':
-                return setBoolean(instance, 'extensionFocusIfEmpty', value);
+                return this.setBoolean('extensionFocusIfEmpty', value);
             case 'yubiKeyShowIcon':
-                return setBoolean(instance, 'yubiKeyShowIcon', value);
+                return this.setBoolean('yubiKeyShowIcon', value);
             case 'yubiKeyAutoOpen':
-                return setBoolean(instance, 'yubiKeyAutoOpen', value);
+                return this.setBoolean('yubiKeyAutoOpen', value);
             case 'yubiKeyMatchEntries':
-                return setBoolean(instance, 'yubiKeyMatchEntries', value);
+                return this.setBoolean('yubiKeyMatchEntries', value);
             case 'yubiKeyShowChalResp':
-                return setBoolean(instance, 'yubiKeyShowChalResp', value);
+                return this.setBoolean('yubiKeyShowChalResp', value);
             case 'yubiKeyRememberChalResp':
-                return setBoolean(instance, 'yubiKeyRememberChalResp', value);
+                return this.setBoolean('yubiKeyRememberChalResp', value);
             case 'yubiKeyStuckWorkaround':
-                return setBoolean(instance, 'yubiKeyStuckWorkaround', value);
+                return this.setBoolean('yubiKeyStuckWorkaround', value);
             case 'canOpen':
-                return setBoolean(instance, 'canOpen', value);
+                return this.setBoolean('canOpen', value);
             case 'canOpenDemo':
-                return setBoolean(instance, 'canOpenDemo', value);
+                return this.setBoolean('canOpenDemo', value);
             case 'canOpenSettings':
-                return setBoolean(instance, 'canOpenSettings', value);
+                return this.setBoolean('canOpenSettings', value);
             case 'canCreate':
-                return setBoolean(instance, 'canCreate', value);
+                return this.setBoolean('canCreate', value);
             case 'canImportXml':
-                return setBoolean(instance, 'canImportXml', value);
+                return this.setBoolean('canImportXml', value);
             case 'canImportCsv':
-                return setBoolean(instance, 'canImportCsv', value);
+                return this.setBoolean('canImportCsv', value);
             case 'canRemoveLatest':
-                return setBoolean(instance, 'canRemoveLatest', value);
+                return this.setBoolean('canRemoveLatest', value);
             case 'canExportXml':
-                return setBoolean(instance, 'canExportXml', value);
+                return this.setBoolean('canExportXml', value);
             case 'canExportHtml':
-                return setBoolean(instance, 'canExportHtml', value);
+                return this.setBoolean('canExportHtml', value);
             case 'canSaveTo':
-                return setBoolean(instance, 'canSaveTo', value);
+                return this.setBoolean('canSaveTo', value);
             case 'canOpenStorage':
-                return setBoolean(instance, 'canOpenStorage', value);
+                return this.setBoolean('canOpenStorage', value);
             case 'canOpenGenerator':
-                return setBoolean(instance, 'canOpenGenerator', value);
+                return this.setBoolean('canOpenGenerator', value);
             case 'canOpenOtpDevice':
-                return setBoolean(instance, 'canOpenOtpDevice', value);
+                return this.setBoolean('canOpenOtpDevice', value);
             case 'dropbox':
-                return setBoolean(instance, 'dropbox', value);
+                return this.setBoolean('dropbox', value);
             case 'dropboxFolder':
-                return setOptionalString(instance, 'dropboxFolder', value);
+                return this.setOptionalString('dropboxFolder', value);
             case 'dropboxAppKey':
-                return setOptionalString(instance, 'dropboxAppKey', value);
+                return this.setOptionalString('dropboxAppKey', value);
             case 'dropboxSecret':
-                return setOptionalString(instance, 'dropboxSecret', value);
+                return this.setOptionalString('dropboxSecret', value);
             case 'webdav':
-                return setBoolean(instance, 'webdav', value);
+                return this.setBoolean('webdav', value);
             case 'webdavSaveMethod':
-                return setWebdavSaveMethod(instance, value);
+                return this.setWebdavSaveMethod(value);
             case 'webdavStatReload':
-                return setBoolean(instance, 'webdavStatReload', value);
+                return this.setBoolean('webdavStatReload', value);
             case 'gdrive':
-                return setBoolean(instance, 'gdrive', value);
+                return this.setBoolean('gdrive', value);
             case 'gdriveClientId':
-                return setOptionalString(instance, 'gdriveClientId', value);
+                return this.setOptionalString('gdriveClientId', value);
             case 'gdriveClientSecret':
-                return setOptionalString(instance, 'gdriveClientSecret', value);
+                return this.setOptionalString('gdriveClientSecret', value);
             case 'onedrive':
-                return setBoolean(instance, 'onedrive', value);
+                return this.setBoolean('onedrive', value);
             case 'onedriveClientId':
-                return setOptionalString(instance, 'onedriveClientId', value);
+                return this.setOptionalString('onedriveClientId', value);
             case 'onedriveClientSecret':
-                return setOptionalString(instance, 'onedriveClientSecret', value);
+                return this.setOptionalString('onedriveClientSecret', value);
         }
     }
 
@@ -354,235 +354,231 @@ class AppSettingsModel extends Model {
         const defaultValues = new AppSettingsModel();
         this.set(key, defaultValues[key]);
     }
-}
 
-function setOptionalString(
-    instance: AppSettingsModel,
-    key:
-        | 'theme'
-        | 'locale'
-        | 'dropboxFolder'
-        | 'dropboxAppKey'
-        | 'dropboxSecret'
-        | 'gdriveClientId'
-        | 'gdriveClientSecret'
-        | 'onedriveClientId'
-        | 'onedriveClientSecret',
-    value: unknown
-): boolean {
-    if (value) {
-        if (typeof value === 'string') {
-            instance[key] = value;
+    private setOptionalString(
+        key:
+            | 'theme'
+            | 'locale'
+            | 'dropboxFolder'
+            | 'dropboxAppKey'
+            | 'dropboxSecret'
+            | 'gdriveClientId'
+            | 'gdriveClientSecret'
+            | 'onedriveClientId'
+            | 'onedriveClientSecret',
+        value: unknown
+    ): boolean {
+        if (value) {
+            if (typeof value === 'string') {
+                this[key] = value;
+                return true;
+            }
+        } else {
+            this[key] = null;
             return true;
         }
-    } else {
-        instance[key] = null;
-        return true;
-    }
-    return false;
-}
-
-function setOptionalPositiveNumber(
-    instance: AppSettingsModel,
-    key: 'listViewWidth' | 'menuViewWidth' | 'tagsViewHeight',
-    value: unknown
-): boolean {
-    if (value) {
-        if (typeof value === 'number' && value > 0) {
-            instance[key] = value;
-            return true;
-        }
-    } else {
-        instance[key] = null;
-        return true;
-    }
-    return false;
-}
-
-function setNonNegativeNumber(
-    instance: AppSettingsModel,
-    key: 'clipboardSeconds' | 'idleMinutes' | 'auditPasswordAge' | 'deviceOwnerAuthTimeoutMinutes',
-    value: unknown
-): boolean {
-    if (typeof value === 'number' && value >= 0) {
-        instance[key] = value;
-        return true;
-    } else if (!value) {
-        instance[key] = 0;
-    }
-    return false;
-}
-
-function setNumberWithMinus1(
-    instance: AppSettingsModel,
-    key: 'autoSaveInterval',
-    value: unknown
-): boolean {
-    if (typeof value === 'number' && (value >= 0 || value === -1)) {
-        instance[key] = value;
-        return true;
-    } else if (!value) {
-        instance[key] = 0;
-    }
-    return false;
-}
-
-type BooleanPropertyNames<T> = {
-    [K in keyof T]: T[K] extends boolean ? K : never;
-}[keyof T];
-
-function setBoolean(
-    instance: AppSettingsModel,
-    key: NonNullable<BooleanPropertyNames<AppSettingsModel>>,
-    value: unknown
-): boolean {
-    if (typeof value === 'boolean') {
-        instance[key] = value;
-        return true;
-    }
-    return true;
-}
-
-function setAutoUpdate(instance: AppSettingsModel, value: unknown) {
-    if (value) {
-        if (value === 'install' || value === 'check') {
-            instance.autoUpdate = value;
-            return true;
-        }
-    } else {
-        instance.autoUpdate = null;
-        return true;
-    }
-    return false;
-}
-
-function setRememberKeyFiles(instance: AppSettingsModel, value: unknown) {
-    if (value === 'path' || value === 'data') {
-        instance.rememberKeyFiles = value;
-        return true;
-    }
-    return false;
-}
-
-function setTitlebarStyle(instance: AppSettingsModel, value: unknown) {
-    if (value === 'default' || value === 'hidden' || value === 'hidden-inset') {
-        instance.titlebarStyle = value;
-        return true;
-    }
-    return false;
-}
-
-function setFontSize(instance: AppSettingsModel, value: unknown) {
-    if (value === 0 || value === 1 || value === 2) {
-        instance.fontSize = value;
-        return true;
-    }
-    return false;
-}
-
-function setTableViewColumns(instance: AppSettingsModel, value: unknown) {
-    if (!value) {
-        instance.tableViewColumns = null;
-        return true;
-    }
-    if (!Array.isArray(value)) {
         return false;
     }
-    for (const item of value) {
-        if (typeof item !== 'string') {
+
+    private setOptionalPositiveNumber(
+        key: 'listViewWidth' | 'menuViewWidth' | 'tagsViewHeight',
+        value: unknown
+    ): boolean {
+        if (value) {
+            if (typeof value === 'number' && value > 0) {
+                this[key] = value;
+                return true;
+            }
+        } else {
+            this[key] = null;
+            return true;
+        }
+        return false;
+    }
+
+    private setNonNegativeNumber(
+        key:
+            | 'clipboardSeconds'
+            | 'idleMinutes'
+            | 'auditPasswordAge'
+            | 'deviceOwnerAuthTimeoutMinutes',
+        value: unknown
+    ): boolean {
+        if (typeof value === 'number' && value >= 0) {
+            this[key] = value;
+            return true;
+        } else if (!value) {
+            this[key] = 0;
+        }
+        return false;
+    }
+
+    private setNumberWithMinus1(key: 'autoSaveInterval', value: unknown): boolean {
+        if (typeof value === 'number' && (value >= 0 || value === -1)) {
+            this[key] = value;
+            return true;
+        } else if (!value) {
+            this[key] = 0;
+        }
+        return false;
+    }
+
+    private setBoolean(
+        key: NonNullable<BooleanPropertyNames<AppSettingsModel>>,
+        value: unknown
+    ): boolean {
+        if (typeof value === 'boolean') {
+            this[key] = value;
+            return true;
+        }
+        return true;
+    }
+
+    private setAutoUpdate(value: unknown) {
+        if (value) {
+            if (value === 'install' || value === 'check') {
+                this.autoUpdate = value;
+                return true;
+            }
+        } else {
+            this.autoUpdate = null;
+            return true;
+        }
+        return false;
+    }
+
+    private setRememberKeyFiles(value: unknown) {
+        if (value === 'path' || value === 'data') {
+            this.rememberKeyFiles = value;
+            return true;
+        }
+        return false;
+    }
+
+    private setTitlebarStyle(value: unknown) {
+        if (value === 'default' || value === 'hidden' || value === 'hidden-inset') {
+            this.titlebarStyle = value;
+            return true;
+        }
+        return false;
+    }
+
+    private setFontSize(value: unknown) {
+        if (value === 0 || value === 1 || value === 2) {
+            this.fontSize = value;
+            return true;
+        }
+        return false;
+    }
+
+    private setTableViewColumns(value: unknown) {
+        if (!value) {
+            this.tableViewColumns = null;
+            return true;
+        }
+        if (!Array.isArray(value)) {
             return false;
         }
-    }
-    instance.tableViewColumns = value;
-    return true;
-}
-
-function setDeviceOwnerAuth(instance: AppSettingsModel, value: unknown) {
-    if (value === 'memory' || value === 'file') {
-        instance.deviceOwnerAuth = value;
-        return true;
-    } else if (!value) {
-        instance.deviceOwnerAuth = null;
-    }
-    return false;
-}
-
-function setWebdavSaveMethod(instance: AppSettingsModel, value: unknown) {
-    if (value === 'put' || value === 'move') {
-        instance.webdavSaveMethod = value;
+        for (const item of value) {
+            if (typeof item !== 'string') {
+                return false;
+            }
+        }
+        this.tableViewColumns = value;
         return true;
     }
-    return false;
-}
 
-function setGeneratorPresets(instance: AppSettingsModel, value: unknown) {
-    if (!value) {
-        instance.generatorPresets = null;
-        return true;
-    }
-    if (typeof value !== 'object' || Array.isArray(value)) {
+    private setDeviceOwnerAuth(value: unknown) {
+        if (value === 'memory' || value === 'file') {
+            this.deviceOwnerAuth = value;
+            return true;
+        } else if (!value) {
+            this.deviceOwnerAuth = null;
+        }
         return false;
     }
 
-    let defaultPreset: string | undefined;
-    const disabled: Record<string, boolean> = {};
-    const user: PasswordGeneratorCustomPreset[] = [];
-
-    const record = value as Record<string, unknown>;
-    if (typeof record.default === 'string') {
-        defaultPreset = record.default;
-    }
-    if (record.disabled && typeof record.disabled === 'object' && !Array.isArray(record.disabled)) {
-        const disabledRecord = record.disabled as Record<string, unknown>;
-        for (const [preset, isDisabled] of Object.entries(disabledRecord)) {
-            disabled[preset] = !!isDisabled;
+    private setWebdavSaveMethod(value: unknown) {
+        if (value === 'put' || value === 'move') {
+            this.webdavSaveMethod = value;
+            return true;
         }
+        return false;
     }
-    if (Array.isArray(record.user)) {
-        for (const item of record.user as unknown[]) {
-            if (!item || typeof item !== 'object' || Array.isArray(item)) {
-                continue;
-            }
-            const itemRecord = item as Record<string, unknown>;
-            if (!itemRecord.name || typeof itemRecord.name !== 'string') {
-                continue;
-            }
-            if (!itemRecord.title || typeof itemRecord.title !== 'string') {
-                continue;
-            }
-            if (!itemRecord.length || typeof itemRecord.length !== 'number') {
-                continue;
-            }
-            const customPreset: PasswordGeneratorCustomPreset = {
-                name: itemRecord.name,
-                title: itemRecord.title,
-                length: itemRecord.length
-            };
-            user.push(customPreset);
 
-            if (typeof itemRecord.include === 'string') {
-                customPreset.include = itemRecord.include;
+    private setGeneratorPresets(value: unknown) {
+        if (!value) {
+            this.generatorPresets = null;
+            return true;
+        }
+        if (typeof value !== 'object' || Array.isArray(value)) {
+            return false;
+        }
+
+        let defaultPreset: string | undefined;
+        const disabled: Record<string, boolean> = {};
+        const user: PasswordGeneratorCustomPreset[] = [];
+
+        const record = value as Record<string, unknown>;
+        if (typeof record.default === 'string') {
+            defaultPreset = record.default;
+        }
+        if (
+            record.disabled &&
+            typeof record.disabled === 'object' &&
+            !Array.isArray(record.disabled)
+        ) {
+            const disabledRecord = record.disabled as Record<string, unknown>;
+            for (const [preset, isDisabled] of Object.entries(disabledRecord)) {
+                disabled[preset] = !!isDisabled;
             }
-            if (typeof itemRecord.pattern === 'string') {
-                customPreset.pattern = itemRecord.pattern;
-            }
-            for (const prop of Object.keys(CharRanges)) {
-                const charRange = prop as CharRange;
-                const enabled = itemRecord[charRange];
-                if (typeof enabled === 'boolean') {
-                    customPreset[charRange] = enabled;
+        }
+        if (Array.isArray(record.user)) {
+            for (const item of record.user as unknown[]) {
+                if (!item || typeof item !== 'object' || Array.isArray(item)) {
+                    continue;
+                }
+                const itemRecord = item as Record<string, unknown>;
+                if (!itemRecord.name || typeof itemRecord.name !== 'string') {
+                    continue;
+                }
+                if (!itemRecord.title || typeof itemRecord.title !== 'string') {
+                    continue;
+                }
+                if (!itemRecord.length || typeof itemRecord.length !== 'number') {
+                    continue;
+                }
+                const customPreset: PasswordGeneratorCustomPreset = {
+                    name: itemRecord.name,
+                    title: itemRecord.title,
+                    length: itemRecord.length
+                };
+                user.push(customPreset);
+
+                if (typeof itemRecord.include === 'string') {
+                    customPreset.include = itemRecord.include;
+                }
+                if (typeof itemRecord.pattern === 'string') {
+                    customPreset.pattern = itemRecord.pattern;
+                }
+                for (const prop of Object.keys(CharRanges)) {
+                    const charRange = prop as CharRange;
+                    const enabled = itemRecord[charRange];
+                    if (typeof enabled === 'boolean') {
+                        customPreset[charRange] = enabled;
+                    }
                 }
             }
         }
+
+        this.generatorPresets = {
+            default: defaultPreset,
+            user,
+            disabled
+        };
+
+        return true;
     }
-
-    instance.generatorPresets = {
-        default: defaultPreset,
-        user,
-        disabled
-    };
-
-    return true;
 }
 
 type AppSettingsFieldName = NonFunctionPropertyNames<AppSettingsModel>;

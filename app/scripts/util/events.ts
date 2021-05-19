@@ -18,6 +18,8 @@ interface EventSpec {
     'main-window-will-close': () => void;
     'keypress': (e: KeyboardEvent) => void;
     'keypress-modal': (e: KeyboardEvent, modal: string) => void;
+    'popup-opened': (win: Window) => void;
+    'popup-closed': (win: Window, location?: string) => void;
 }
 
 class Events extends TypedEmitter<EventSpec> {

@@ -14,9 +14,11 @@ export interface AlertConfig {
     click?: string;
     enter?: string;
     skipIfAlertDisplayed?: boolean;
-}
 
-type AlertResult = string | undefined;
+    success?: (result: string, checked?: boolean) => void;
+    complete?: (result: string, checked?: boolean) => void;
+    cancel?: () => void;
+}
 
 const alertDisplayed = false;
 
@@ -64,11 +66,11 @@ export const Alerts = {
         }
     } as Record<string, AlertButton>,
 
-    alert(config: AlertConfig): Promise<AlertResult> {
+    alert(config: AlertConfig): void {
         if (config.skipIfAlertDisplayed && Alerts.alertDisplayed) {
-            return Promise.resolve(undefined);
+            return;
         }
-        return Promise.reject('Not implemented');
+        throw new Error('Not implemented');
         // Alerts.alertDisplayed = true;
         // const view = new ModalView(config);
         // view.render();
@@ -89,8 +91,8 @@ export const Alerts = {
         // return view;
     },
 
-    notImplemented(): Promise<AlertResult> {
-        return this.alert({
+    notImplemented(): void {
+        this.alert({
             header: Locale.notImplemented,
             body: '',
             icon: 'exclamation-triangle',
@@ -101,8 +103,8 @@ export const Alerts = {
         });
     },
 
-    info(config: AlertConfig): Promise<AlertResult> {
-        return this.alert({
+    info(config: AlertConfig): void {
+        this.alert({
             icon: 'info',
             buttons: [this.buttons.ok],
             esc: '',
@@ -112,8 +114,8 @@ export const Alerts = {
         });
     },
 
-    error(config: AlertConfig): Promise<AlertResult> {
-        return this.alert({
+    error(config: AlertConfig): void {
+        this.alert({
             icon: 'exclamation-circle',
             buttons: [this.buttons.ok],
             esc: '',
@@ -123,8 +125,8 @@ export const Alerts = {
         });
     },
 
-    yesno(config: AlertConfig): Promise<AlertResult> {
-        return this.alert({
+    yesno(config: AlertConfig): void {
+        this.alert({
             icon: 'question',
             buttons: [this.buttons.yes, this.buttons.no],
             esc: '',
@@ -132,5 +134,38 @@ export const Alerts = {
             enter: 'yes',
             ...config
         });
+    },
+
+    promise: {
+        alert(config: AlertConfig): Promise<string> {
+            return alertAsPromise(config, 'alert');
+        },
+
+        info(config: AlertConfig): Promise<string> {
+            return alertAsPromise(config, 'info');
+        },
+
+        error(config: AlertConfig): Promise<string> {
+            return alertAsPromise(config, 'error');
+        },
+
+        yesno(config: AlertConfig): Promise<string> {
+            return alertAsPromise(config, 'yesno');
+        }
     }
 };
+
+function alertAsPromise(
+    config: AlertConfig,
+    method: 'alert' | 'yesno' | 'error' | 'info'
+): Promise<string> {
+    return new Promise((resolve) => {
+        Alerts[method]({
+            ...config,
+            complete(result, checked) {
+                config.complete?.(result, checked);
+                resolve(result);
+            }
+        });
+    });
+}

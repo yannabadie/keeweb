@@ -2,12 +2,15 @@ import { Model } from 'util/model';
 import { SettingsStore } from 'comp/settings/settings-store';
 import { noop, omitEmpty } from 'util/fn';
 import { Logger } from 'util/logger';
+import { NonFunctionPropertyNames, OptionalBooleanPropertyNames } from 'util/types';
 
 const logger = new Logger('runtime-data');
 
 let changeListener: () => void;
 
 class RuntimeDataModel extends Model {
+    skipFolderRightsWarning?: boolean;
+
     async init(): Promise<void> {
         await this.load();
 
@@ -40,6 +43,10 @@ class RuntimeDataModel extends Model {
     }
 
     set(key: string, value: unknown): boolean {
+        switch (key as NonFunctionPropertyNames<RuntimeDataModel>) {
+            case 'skipFolderRightsWarning':
+                return this.setBoolean('skipFolderRightsWarning', value);
+        }
         const thisRec = this as Record<string, unknown>;
         thisRec[key] = value;
         return true;
@@ -51,6 +58,21 @@ class RuntimeDataModel extends Model {
 
     toJSON(): Record<string, unknown> {
         return omitEmpty(this as Record<string, unknown>);
+    }
+
+    private setBoolean(
+        key: NonNullable<OptionalBooleanPropertyNames<RuntimeDataModel>>,
+        value: unknown
+    ): boolean {
+        if (typeof value === 'boolean') {
+            this[key] = value;
+            return true;
+        }
+        if (!value) {
+            this[key] = undefined;
+            return true;
+        }
+        return true;
     }
 }
 

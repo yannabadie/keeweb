@@ -1,19 +1,13 @@
-import { Events } from 'framework/events';
+import { Events } from 'util/events';
 import { Launcher } from 'comp/launcher';
 import { Alerts } from 'comp/ui/alerts';
 import { Timeouts } from 'const/timeouts';
 import { Locale } from 'util/locale';
-import { Logger } from 'util/logger';
-import { noop } from 'util/fn';
 
 const PopupNotifier = {
-    logger: null,
-
-    init() {
-        this.logger = new Logger('popup-notifier');
-
+    init(): void {
         if (Launcher) {
-            window.open = noop;
+            window.open = () => null;
         } else {
             const windowOpen = window.open;
             window.open = function (...args) {
@@ -21,24 +15,22 @@ const PopupNotifier = {
                 if (win) {
                     PopupNotifier.deferCheckClosed(win);
                     Events.emit('popup-opened', win);
-                } else {
-                    if (!Alerts.alertDisplayed) {
-                        Alerts.error({
-                            header: Locale.authPopupRequired,
-                            body: Locale.authPopupRequiredBody
-                        });
-                    }
+                } else if (!Alerts.alertDisplayed) {
+                    Alerts.error({
+                        header: Locale.authPopupRequired,
+                        body: Locale.authPopupRequiredBody
+                    });
                 }
                 return win;
             };
         }
     },
 
-    deferCheckClosed(win) {
+    deferCheckClosed(win: Window): void {
         setTimeout(PopupNotifier.checkClosed.bind(PopupNotifier, win), Timeouts.CheckWindowClosed);
     },
 
-    checkClosed(win) {
+    checkClosed(win: Window): void {
         if (win.closed) {
             setTimeout(
                 PopupNotifier.triggerClosed.bind(PopupNotifier, win),
@@ -57,7 +49,7 @@ const PopupNotifier = {
         }
     },
 
-    tryGetLocationSearch(win) {
+    tryGetLocationSearch(win: Window): string | undefined {
         try {
             if (win.location.host === location.host) {
                 return win.location.search;
@@ -65,8 +57,8 @@ const PopupNotifier = {
         } catch {}
     },
 
-    triggerClosed(window, locationSearch) {
-        Events.emit('popup-closed', { window, locationSearch });
+    triggerClosed(window: Window, locationSearch?: string): void {
+        Events.emit('popup-closed', window, locationSearch);
     }
 };
 
