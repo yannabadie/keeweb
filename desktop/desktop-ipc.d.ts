@@ -17,6 +17,18 @@ export interface NativeModuleHostCallbackYubiKeys {
     numYubiKeys: number;
 }
 
+export interface ProcessSpawnArg {
+    cmd: string;
+    args: string[];
+}
+
+export interface ProcessSpawnResult {
+    err?: string;
+    code?: number;
+    stdout?: string;
+    stderr?: string;
+}
+
 export type NativeModuleHostCallbackMessage = NativeModuleHostCallbackYubiKeys;
 
 export interface DesktopShortcutsSettings {
@@ -53,5 +65,7 @@ export interface DesktopIpcMainCalls {
     'is-app-focused': () => boolean;
     'set-global-shortcuts': (shortcuts: DesktopShortcutsSettings) => void;
     'get-temp-path': () => string | undefined;
+    'get-app-path': () => string;
     'resolve-proxy': (url: string) => { host: string; port: string } | undefined;
+    'spawn-process': (arg: ProcessSpawnArg) => ProcessSpawnResult;
 }

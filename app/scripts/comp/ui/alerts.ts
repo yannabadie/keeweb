@@ -3,6 +3,7 @@ import { Locale } from 'util/locale';
 export interface AlertButton {
     result: string;
     title: string;
+    error?: boolean;
 }
 
 export interface AlertConfig {
@@ -14,6 +15,7 @@ export interface AlertConfig {
     click?: string;
     enter?: string;
     skipIfAlertDisplayed?: boolean;
+    pre?: string;
 
     success?: (result: string, checked?: boolean) => void;
     complete?: (result: string, checked?: boolean) => void;
@@ -22,7 +24,7 @@ export interface AlertConfig {
 
 const alertDisplayed = false;
 
-class Alert {
+export class Alert {
     visible = false;
     result: string | undefined;
 

@@ -10,7 +10,7 @@ import {
     DesktopIpcMainCalls
 } from 'desktop/desktop-ipc';
 
-// const logger = new Logger('launcher');
+const logger = new Logger('launcher');
 
 type TypedIpcRenderer = {
     on<EventName extends keyof DesktopIpcRendererEvents>(
@@ -254,35 +254,32 @@ export class LauncherElectron {
     // showMainWindow() {
     //     this.remoteApp().showAndFocusMainWindow();
     // },
-    // spawn(config) {
-    //     const ts = logger.ts();
-    //     const { ipcRenderer } = this.electron();
-    //     let { complete } = config;
-    //     delete config.complete;
-    //     ipcRenderer
-    //         .invoke('spawnProcess', config)
-    //         .then((res) => {
-    //             if (res.err) {
-    //                 logger.error('spawn error: ' + config.cmd + ', ' + logger.ts(ts), res.err);
-    //                 complete?.(res.err);
-    //             } else {
-    //                 const code = res.code;
-    //                 const stdout = res.stdout || '';
-    //                 const stderr = res.stderr || '';
-    //                 const msg = 'spawn ' + config.cmd + ': ' + code + ', ' + logger.ts(ts);
-    //                 if (code !== 0) {
-    //                     logger.error(msg + '\n' + stdout + '\n' + stderr);
-    //                 } else {
-    //                     logger.info(msg + (stdout && !config.noStdOutLogging ? '\n' + stdout : ''));
-    //                 }
-    //                 complete?.(code !== 0 ? 'Exit code ' + code : null, stdout, code);
-    //             }
-    //             complete = null;
-    //         })
-    //         .catch((err) => {
-    //             complete?.(err);
-    //         });
-    // },
+
+    async spawn(config: {
+        cmd: string;
+        args: string[];
+        noStdOutLogging?: boolean;
+    }): Promise<{ code?: number; stdout?: string; stderr?: string }> {
+        const ts = logger.ts();
+        const res = await this.ipcRenderer.invoke('spawn-process', {
+            cmd: config.cmd,
+            args: config.args
+        });
+        if (res.err) {
+            logger.error('spawn error: ' + config.cmd + ', ' + logger.ts(ts), res.err);
+            throw new Error(res.err);
+        } else {
+            const msg = `spawn ${config.cmd}: ${res.code || 0}, ${logger.ts(ts)}`;
+            if (res.code) {
+                logger.error(`${msg}\n${res.stdout ?? ''}\n${res.stderr ?? ''}`);
+                throw new Error(`Exit code ${res.code}`);
+            } else {
+                logger.info(msg + (res.stdout && !config.noStdOutLogging ? '\n' + res.stdout : ''));
+            }
+            return res;
+        }
+    }
+
     // checkOpenFiles() {
     //     this.readyToOpenFiles = true;
     //     if (this.pendingFileToOpen) {
