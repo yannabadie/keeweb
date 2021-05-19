@@ -4,11 +4,7 @@ import { Logger } from 'util/logger';
 import { noop, unreachable } from 'util/fn';
 import { Launcher } from 'comp/launcher';
 import { Timeouts } from 'const/timeouts';
-import {
-    NativeModuleCalls,
-    NativeModuleHostCallbackMessage,
-    YubiKeyInfo
-} from 'desktop/desktop-ipc';
+import { NativeModuleCalls, NativeModuleHostCallbackMessage, YubiKeyInfo } from './desktop-ipc';
 
 const logger = new Logger('native-module-connector');
 

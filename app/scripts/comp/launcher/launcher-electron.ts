@@ -4,11 +4,7 @@
 import { Logger } from 'util/logger';
 import { noop } from 'util/fn';
 import * as electron from 'electron';
-import {
-    DesktopIpcRendererEvents,
-    DesktopIpcMainEvents,
-    DesktopIpcMainCalls
-} from 'desktop/desktop-ipc';
+import { DesktopIpcRendererEvents, DesktopIpcMainEvents, DesktopIpcMainCalls } from './desktop-ipc';
 
 const logger = new Logger('launcher');
 
