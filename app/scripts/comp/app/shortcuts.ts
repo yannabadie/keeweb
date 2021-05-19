@@ -1,36 +1,50 @@
 import { Launcher } from 'comp/launcher';
 import { Keys } from 'const/keys';
-import { AppSettingsModel } from 'models/app-settings-model';
+import { AppSettingsFieldName, AppSettingsModel } from 'models/app-settings-model';
 import { Features } from 'util/features';
-import { StringFormat } from 'util/formatting/string-format';
 import { Locale } from 'util/locale';
 
-let allowedKeys;
+let allowedKeys: Map<number, string>;
 
-function getAllowedKeys() {
+function getAllowedKeys(): Map<number, string> {
     if (!allowedKeys) {
-        allowedKeys = {};
+        allowedKeys = new Map<number, string>();
         for (const [name, code] of Object.entries(Keys)) {
+            if (typeof code === 'string') {
+                continue;
+            }
             const keyName = name.replace('DOM_VK_', '');
             if (/^([0-9A-Z]|F\d{1,2})$/.test(keyName)) {
-                allowedKeys[code] = keyName;
+                allowedKeys.set(code, keyName);
             }
         }
     }
     return allowedKeys;
 }
 
-const globalShortcuts = {
+const AllGlobalShortcuts = {
     copyPassword: { mac: 'Ctrl+Alt+C', all: 'Shift+Alt+C' },
     copyUser: { mac: 'Ctrl+Alt+B', all: 'Shift+Alt+B' },
     copyUrl: { mac: 'Ctrl+Alt+U', all: 'Shift+Alt+U' },
-    copyOtp: {},
+    copyOtp: undefined,
     autoType: { mac: 'Ctrl+Alt+T', all: 'Shift+Alt+T' },
-    restoreApp: {}
+    restoreApp: undefined
+};
+
+const GlobalShortcutAppSettingsFields: Record<
+    keyof typeof AllGlobalShortcuts,
+    AppSettingsFieldName
+> = {
+    copyPassword: 'globalShortcutCopyPassword',
+    copyUser: 'globalShortcutCopyUser',
+    copyUrl: 'globalShortcutCopyUrl',
+    copyOtp: 'globalShortcutCopyOtp',
+    autoType: 'globalShortcutAutoType',
+    restoreApp: 'globalShortcutRestoreApp'
 };
 
 const Shortcuts = {
-    keyEventToShortcut(event) {
+    keyEventToShortcut(event: KeyboardEvent): { valid: boolean; value: string } {
         const modifiers = [];
         if (event.ctrlKey) {
             modifiers.push('Ctrl');
@@ -44,13 +58,14 @@ const Shortcuts = {
         if (Features.isMac && event.metaKey) {
             modifiers.push('Meta');
         }
-        const keyName = getAllowedKeys()[event.which];
+        const keyName = getAllowedKeys().get(event.which);
         return {
             value: modifiers.join('+') + '+' + (keyName || '…'),
             valid: modifiers.length > 0 && !!keyName
         };
     },
-    presentShortcut(shortcutValue, formatting) {
+
+    presentShortcut(shortcutValue: string | undefined, formatting?: boolean): string {
         if (!shortcutValue) {
             return '-';
         }
@@ -72,30 +87,38 @@ const Shortcuts = {
             })
             .join('');
     },
-    actionShortcutSymbol(formatting) {
+
+    actionShortcutSymbol(formatting?: boolean): string {
         return Features.isMac ? '⌘' : this.formatShortcut(Locale.ctrlKey, formatting);
     },
-    altShortcutSymbol(formatting) {
+
+    altShortcutSymbol(formatting?: boolean): string {
         return Features.isMac ? '⌥' : this.formatShortcut(Locale.altKey, formatting);
     },
-    shiftShortcutSymbol(formatting) {
+
+    shiftShortcutSymbol(formatting?: boolean): string {
         return Features.isMac ? '⇧' : this.formatShortcut(Locale.shiftKey, formatting);
     },
-    ctrlShortcutSymbol(formatting) {
+
+    ctrlShortcutSymbol(formatting?: boolean): string {
         return Features.isMac ? '⌃' : this.formatShortcut(Locale.ctrlKey, formatting);
     },
-    formatShortcut(shortcut, formatting) {
+
+    formatShortcut(shortcut: string, formatting?: boolean): string {
         return formatting ? `${shortcut} + ` : `${shortcut}+`;
     },
-    globalShortcutText(type, formatting) {
+
+    globalShortcutText(type: keyof typeof AllGlobalShortcuts, formatting?: boolean): string {
         return this.presentShortcut(this.globalShortcut(type), formatting);
     },
-    globalShortcut(type) {
-        const appSettingsShortcut = AppSettingsModel[this.globalShortcutAppSettingsKey(type)];
-        if (appSettingsShortcut) {
+
+    globalShortcut(type: keyof typeof AllGlobalShortcuts): string | undefined {
+        const setting = GlobalShortcutAppSettingsFields[type];
+        const appSettingsShortcut = AppSettingsModel[setting];
+        if (typeof appSettingsShortcut === 'string') {
             return appSettingsShortcut;
         }
-        const globalShortcut = globalShortcuts[type];
+        const globalShortcut = AllGlobalShortcuts[type];
         if (globalShortcut) {
             if (Features.isMac && globalShortcut.mac) {
                 return globalShortcut.mac;
@@ -104,21 +127,21 @@ const Shortcuts = {
         }
         return undefined;
     },
-    setGlobalShortcut(type, value) {
-        if (!globalShortcuts[type]) {
+
+    setGlobalShortcut(type: keyof typeof AllGlobalShortcuts, value: string): void {
+        if (!AllGlobalShortcuts[type]) {
             throw new Error('Bad shortcut: ' + type);
         }
+        const setting = GlobalShortcutAppSettingsFields[type];
         if (value) {
-            AppSettingsModel[this.globalShortcutAppSettingsKey(type)] = value;
+            AppSettingsModel.set(setting, value);
         } else {
-            delete AppSettingsModel[this.globalShortcutAppSettingsKey(type)];
+            AppSettingsModel.delete(setting);
         }
-        Launcher.setGlobalShortcuts(AppSettingsModel);
+        Launcher?.ipcRenderer.invoke('set-global-shortcuts', { [setting]: value });
     },
-    globalShortcutAppSettingsKey(type) {
-        return 'globalShortcut' + StringFormat.capFirst(type);
-    },
-    screenshotToClipboardShortcut() {
+
+    screenshotToClipboardShortcut(): string {
         if (Features.isiOS) {
             return 'Sleep+Home';
         }

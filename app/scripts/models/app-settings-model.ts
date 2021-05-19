@@ -88,6 +88,13 @@ class AppSettingsModel extends Model {
     canOpenGenerator = true; // can open password generator
     canOpenOtpDevice = true; // can open OTP codes from USB tokens
 
+    globalShortcutCopyPassword: string | null = null; // system-wide shortcut to copy password
+    globalShortcutCopyUser: string | null = null; // system-wide shortcut to copy username
+    globalShortcutCopyUrl: string | null = null; // system-wide shortcut to copy website
+    globalShortcutCopyOtp: string | null = null; // system-wide shortcut to copy otp
+    globalShortcutAutoType: string | null = null; // system-wide shortcut to launch auto-type
+    globalShortcutRestoreApp: string | null = null; // system-wide shortcut to show the app
+
     dropbox = true; // enable Dropbox integration
     dropboxFolder: string | null = null; // default folder path
     dropboxAppKey: string | null = null; // custom Dropbox app key
@@ -312,6 +319,18 @@ class AppSettingsModel extends Model {
                 return this.setBoolean('canOpenGenerator', value);
             case 'canOpenOtpDevice':
                 return this.setBoolean('canOpenOtpDevice', value);
+            case 'globalShortcutCopyPassword':
+                return this.setOptionalString('globalShortcutCopyPassword', value);
+            case 'globalShortcutCopyUser':
+                return this.setOptionalString('globalShortcutCopyUser', value);
+            case 'globalShortcutCopyUrl':
+                return this.setOptionalString('globalShortcutCopyUrl', value);
+            case 'globalShortcutCopyOtp':
+                return this.setOptionalString('globalShortcutCopyOtp', value);
+            case 'globalShortcutAutoType':
+                return this.setOptionalString('globalShortcutAutoType', value);
+            case 'globalShortcutRestoreApp':
+                return this.setOptionalString('globalShortcutRestoreApp', value);
             case 'dropbox':
                 return this.setBoolean('dropbox', value);
             case 'dropboxFolder':
@@ -359,6 +378,12 @@ class AppSettingsModel extends Model {
         key:
             | 'theme'
             | 'locale'
+            | 'globalShortcutCopyPassword'
+            | 'globalShortcutCopyUser'
+            | 'globalShortcutCopyUrl'
+            | 'globalShortcutCopyOtp'
+            | 'globalShortcutAutoType'
+            | 'globalShortcutRestoreApp'
             | 'dropboxFolder'
             | 'dropboxAppKey'
             | 'dropboxSecret'

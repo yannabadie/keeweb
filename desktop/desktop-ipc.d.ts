@@ -19,6 +19,15 @@ export interface NativeModuleHostCallbackYubiKeys {
 
 export type NativeModuleHostCallbackMessage = NativeModuleHostCallbackYubiKeys;
 
+export interface DesktopShortcutsSettings {
+    globalShortcutCopyPassword?: string;
+    globalShortcutCopyUser?: string;
+    globalShortcutCopyUrl?: string;
+    globalShortcutCopyOtp?: string;
+    globalShortcutAutoType?: string;
+    globalShortcutRestoreApp?: string;
+}
+
 // ipcRenderer.on('event', ...args)
 // mainWindow.webContents.send('event', ...args)
 export interface DesktopIpcRendererEvents {
@@ -42,4 +51,5 @@ export interface DesktopIpcMainCalls {
     'load-config': (name: string) => string;
     'save-config': (name: string, data: string) => string;
     'is-app-focused': () => boolean;
+    'set-global-shortcuts': (shortcuts: DesktopShortcutsSettings) => void;
 }

@@ -297,9 +297,6 @@ export class LauncherElectron {
     //         this.pendingFileToOpen = file;
     //     }
     // },
-    // setGlobalShortcuts(appSettings) {
-    //     this.remoteApp().setGlobalShortcuts(appSettings);
-    // },
     // minimizeMainWindow() {
     //     this.getMainWindow().minimize();
     // },
