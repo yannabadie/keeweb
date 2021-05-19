@@ -26,10 +26,10 @@ type TypedIpcRenderer = {
         ...args: Parameters<DesktopIpcMainEvents[EventName]>
     ): void;
 
-    invoke<EventName extends keyof DesktopIpcMainCalls>(
-        event: EventName,
-        ...args: Parameters<DesktopIpcMainCalls[EventName]>
-    ): Promise<ReturnType<DesktopIpcMainCalls[EventName]>>;
+    invoke<CallName extends keyof DesktopIpcMainCalls>(
+        method: CallName,
+        ...args: Parameters<DesktopIpcMainCalls[CallName]>
+    ): Promise<ReturnType<DesktopIpcMainCalls[CallName]>>;
 };
 
 export class LauncherElectron {
@@ -197,19 +197,22 @@ export class LauncherElectron {
     // cancelRestart() {
     //     this.pendingUpdateFile = undefined;
     // },
-    // setClipboardText(text) {
-    //     return this.electron().clipboard.writeText(text);
-    // },
-    // getClipboardText() {
-    //     return this.electron().clipboard.readText();
-    // },
-    // clearClipboardText() {
-    //     const { clipboard } = this.electron();
-    //     clipboard.clear();
-    //     if (process.platform === 'linux') {
-    //         clipboard.clear('selection');
-    //     }
-    // },
+
+    setClipboardText(text: string): void {
+        electron.clipboard.writeText(text);
+    }
+
+    getClipboardText(): string {
+        return electron.clipboard.readText();
+    }
+
+    clearClipboardText(): void {
+        electron.clipboard.clear();
+        if (process.platform === 'linux') {
+            electron.clipboard.clear('selection');
+        }
+    }
+
     // quitOnRealQuitEventIfMinimizeOnQuitIsEnabled() {
     //     return !!(this.platform() === 'darwin' || this.pendingUpdateFile);
     // },

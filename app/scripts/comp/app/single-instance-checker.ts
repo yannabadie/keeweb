@@ -1,4 +1,4 @@
-import { Events } from 'framework/events';
+import { Events } from 'util/events';
 import { Launcher } from 'comp/launcher';
 
 const LocalStorageKeyName = 'instanceCheck';
@@ -7,15 +7,16 @@ const LocalStorageResponseKeyName = 'instanceMaster';
 const instanceKey = Date.now().toString();
 
 const SingleInstanceChecker = {
-    init() {
+    init(): void {
         if (Launcher) {
             return;
         }
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         window.addEventListener('storage', SingleInstanceChecker.storageChanged);
         SingleInstanceChecker.setKey(LocalStorageKeyName, instanceKey);
     },
 
-    storageChanged(e) {
+    storageChanged(e: StorageEvent): void {
         if (!e.newValue) {
             return;
         }
@@ -25,12 +26,13 @@ const SingleInstanceChecker = {
                 instanceKey + Math.random().toString()
             );
         } else if (e.key === LocalStorageResponseKeyName && e.newValue.indexOf(instanceKey) < 0) {
+            // eslint-disable-next-line @typescript-eslint/unbound-method
             window.removeEventListener('storage', SingleInstanceChecker.storageChanged);
             Events.emit('second-instance');
         }
     },
 
-    setKey(key, value) {
+    setKey(key: string, value: string): void {
         try {
             localStorage.setItem(key, value);
             setTimeout(() => {

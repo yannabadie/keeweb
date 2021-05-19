@@ -1,8 +1,9 @@
-import { Events } from 'framework/events';
+import { Events } from 'util/events';
 import { Logger } from 'util/logger';
 import { NativeModules } from 'comp/launcher/native-modules';
 import { AppSettingsModel } from 'models/app-settings-model';
 import { Features } from 'util/features';
+import { noop } from 'util/fn';
 
 const logger = new Logger('usb-listener');
 
@@ -10,51 +11,47 @@ const UsbListener = {
     supported: Features.isDesktop,
     attachedYubiKeys: 0,
 
-    init() {
+    init(): void {
         if (!this.supported) {
             return;
         }
 
-        Events.on('native-modules-yubikeys', (e) => {
-            if (e.numYubiKeys !== this.attachedYubiKeys) {
-                logger.debug(`YubiKeys changed ${this.attachedYubiKeys} => ${e.numYubiKeys}`);
-                this.attachedYubiKeys = e.numYubiKeys;
+        Events.on('native-modules-yubikeys', (numYubiKeys) => {
+            if (numYubiKeys !== this.attachedYubiKeys) {
+                logger.debug(`YubiKeys changed ${this.attachedYubiKeys} => ${numYubiKeys}`);
+                this.attachedYubiKeys = numYubiKeys;
                 Events.emit('usb-devices-changed');
             }
         });
 
-        AppSettingsModel.on('change:enableUsb', (model, enabled) => {
+        AppSettingsModel.onChange('enableUsb', (enabled) => {
             if (enabled) {
-                this.start();
+                this.start().catch(noop);
             } else {
-                this.stop();
+                this.stop().catch(noop);
             }
         });
 
         if (AppSettingsModel.enableUsb) {
-            this.start();
+            this.start().catch(noop);
         }
     },
 
-    start() {
+    async start(): Promise<void> {
         logger.info('Starting USB listener');
 
-        if (this.usb) {
-            this.stop();
-        }
-
         try {
-            NativeModules.startUsbListener();
+            await NativeModules.startUsbListener();
         } catch (e) {
             logger.error('Error starting USB listener', e);
         }
     },
 
-    stop() {
+    async stop(): Promise<void> {
         logger.info('Stopping USB listener');
 
         try {
-            NativeModules.stopUsbListener();
+            await NativeModules.stopUsbListener();
         } catch (e) {
             logger.error('Error stopping USB listener', e);
         }

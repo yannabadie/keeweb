@@ -1,17 +1,20 @@
-import { Events } from 'framework/events';
+import { Events } from 'util/events';
 import { Launcher } from 'comp/launcher';
 import { AppSettingsModel } from 'models/app-settings-model';
 
-const CopyPaste = {
-    simpleCopy: !!(Launcher && Launcher.clipboardSupported),
+interface CopyPasteResult {
+    success: boolean;
+    seconds?: number;
+}
 
-    copy(text) {
-        if (this.simpleCopy) {
+const CopyPaste = {
+    copy(text: string): CopyPasteResult {
+        if (Launcher) {
             Launcher.setClipboardText(text);
             const clipboardSeconds = AppSettingsModel.clipboardSeconds;
             if (clipboardSeconds > 0) {
                 const clearClipboard = () => {
-                    if (Launcher.getClipboardText() === text) {
+                    if (Launcher?.getClipboardText() === text) {
                         Launcher.clearClipboardText();
                     }
                 };
@@ -28,39 +31,41 @@ const CopyPaste = {
                     return { success: true };
                 }
             } catch (e) {}
-            return false;
+            return { success: false };
         }
     },
 
-    createHiddenInput(text) {
-        const hiddenInput = $('<input/>')
-            .val(text)
-            .attr({ type: 'text', 'class': 'hide-by-pos' })
-            .appendTo(document.body);
-        hiddenInput[0].selectionStart = 0;
-        hiddenInput[0].selectionEnd = text.length;
+    createHiddenInput(text: string): void {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.value = text;
+        hiddenInput.classList.add('hide-by-pos');
+        document.body.appendChild(hiddenInput);
+        hiddenInput.selectionStart = 0;
+        hiddenInput.selectionEnd = text.length;
         hiddenInput.focus();
-        hiddenInput.on({
-            'copy cut paste'() {
-                setTimeout(() => hiddenInput.blur(), 0);
-            },
-            blur() {
-                hiddenInput.remove();
-            }
-        });
+
+        const onChange = () => {
+            setTimeout(() => hiddenInput.blur(), 0);
+        };
+        hiddenInput.addEventListener('cut', onChange);
+        hiddenInput.addEventListener('copy', onChange);
+        hiddenInput.addEventListener('paste', onChange);
+        hiddenInput.addEventListener('blur', () => hiddenInput.remove());
     },
 
-    copyHtml(html) {
+    copyHtml(html: string): boolean {
         const el = document.createElement('div');
         el.style.userSelect = 'auto';
-        el.style.webkitUserSelect = 'auto';
-        el.style.mozUserSelect = 'auto';
         el.innerHTML = html;
         document.body.appendChild(el);
 
         const range = document.createRange();
         range.selectNodeContents(el);
         const sel = window.getSelection();
+        if (!sel) {
+            el.remove();
+            return false;
+        }
         sel.removeAllRanges();
         sel.addRange(range);
 

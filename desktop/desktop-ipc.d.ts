@@ -41,4 +41,5 @@ export interface DesktopIpcMainCalls {
     'set-locale': (locale: string, values: Record<string, string>) => void;
     'load-config': (name: string) => string;
     'save-config': (name: string, data: string) => string;
+    'is-app-focused': () => boolean;
 }

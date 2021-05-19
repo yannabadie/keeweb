@@ -1,62 +1,77 @@
-import { Events } from 'framework/events';
+import { Events } from 'util/events';
 import { IdleTracker } from 'comp/browser/idle-tracker';
 import { Keys } from 'const/keys';
 import { FocusManager } from 'comp/app/focus-manager';
 
 const shortcutKeyProp = navigator.platform.indexOf('Mac') >= 0 ? 'metaKey' : 'ctrlKey';
 
+interface ShortcutDef {
+    handler: (e: KeyboardEvent, code: number) => void;
+    shortcut?: number;
+    modal?: string;
+    noPrevent?: boolean;
+}
+
 class KeyHandler {
     SHORTCUT_ACTION = 1;
     SHORTCUT_OPT = 2;
     SHORTCUT_SHIFT = 4;
 
-    shortcuts = {};
+    shortcuts = new Map<Keys, ShortcutDef[]>();
 
     init() {
-        $(document).bind('keypress', this.keypress.bind(this));
-        $(document).bind('keydown', this.keydown.bind(this));
+        document.addEventListener('keypress', (e) => this.keypress(e));
+        document.addEventListener('keydown', (e) => this.keydown(e));
 
-        this.shortcuts[Keys.DOM_VK_A] = [
+        this.shortcuts.set(Keys.DOM_VK_A, [
             {
-                handler: this.handleAKey,
-                thisArg: this,
+                handler: (e) => this.handleAKey(e),
                 shortcut: this.SHORTCUT_ACTION,
-                modal: true,
+                modal: '*',
                 noPrevent: true
             }
-        ];
+        ]);
     }
 
-    onKey(key, handler, thisArg, shortcut, modal, noPrevent) {
-        let keyShortcuts = this.shortcuts[key];
+    onKey(
+        key: Keys,
+        handler: (e: KeyboardEvent) => void,
+        shortcut?: number,
+        modal?: string,
+        noPrevent?: boolean
+    ): () => void {
+        let keyShortcuts = this.shortcuts.get(key);
         if (!keyShortcuts) {
-            this.shortcuts[key] = keyShortcuts = [];
+            keyShortcuts = [];
+            this.shortcuts.set(key, keyShortcuts);
         }
-        keyShortcuts.push({
+        const def: ShortcutDef = {
             handler,
-            thisArg,
             shortcut,
             modal,
             noPrevent
-        });
+        };
+        keyShortcuts.push(def);
+
+        return () => {
+            const keyShortcuts = this.shortcuts.get(key);
+            if (keyShortcuts) {
+                const ix = keyShortcuts.indexOf(def);
+                if (ix >= 0) {
+                    keyShortcuts.splice(ix, 1);
+                }
+            }
+        };
     }
 
-    offKey(key, handler, thisArg) {
-        if (this.shortcuts[key]) {
-            this.shortcuts[key] = this.shortcuts[key].filter(
-                (sh) => sh.handler !== handler || sh.thisArg !== thisArg
-            );
-        }
-    }
-
-    isActionKey(e) {
+    isActionKey(e: KeyboardEvent): boolean {
         return e[shortcutKeyProp];
     }
 
-    keydown(e) {
+    keydown(e: KeyboardEvent): void {
         IdleTracker.regUserAction();
         const code = e.keyCode || e.which;
-        const keyShortcuts = this.shortcuts[code];
+        const keyShortcuts = this.shortcuts.get(code);
         if (keyShortcuts && keyShortcuts.length) {
             for (const sh of keyShortcuts) {
                 if (FocusManager.modal && sh.modal !== FocusManager.modal && sh.modal !== '*') {
@@ -91,18 +106,23 @@ class KeyHandler {
                         }
                         break;
                 }
-                sh.handler.call(sh.thisArg, e, code);
+                let immediatePropagationStopped = false;
+                e.stopImmediatePropagation = () => {
+                    immediatePropagationStopped = true;
+                    KeyboardEvent.prototype.stopImmediatePropagation.call(e);
+                };
+                sh.handler(e, code);
                 if (isActionKey && !sh.noPrevent) {
                     e.preventDefault();
                 }
-                if (e.isImmediatePropagationStopped()) {
+                if (immediatePropagationStopped) {
                     break;
                 }
             }
         }
     }
 
-    keypress(e) {
+    keypress(e: KeyboardEvent): void {
         if (
             !FocusManager.modal &&
             e.which !== Keys.DOM_VK_RETURN &&
@@ -114,7 +134,7 @@ class KeyHandler {
         ) {
             Events.emit('keypress', e);
         } else if (FocusManager.modal) {
-            Events.emit('keypress:' + FocusManager.modal, e);
+            Events.emit('keypress-modal', e, FocusManager.modal);
         }
     }
 
@@ -122,11 +142,8 @@ class KeyHandler {
         IdleTracker.regUserAction();
     }
 
-    handleAKey(e) {
-        if (
-            e.target.tagName.toLowerCase() === 'input' &&
-            ['password', 'text'].indexOf(e.target.type) >= 0
-        ) {
+    handleAKey(e: KeyboardEvent): void {
+        if (e.target instanceof HTMLInputElement && ['password', 'text'].includes(e.target.type)) {
             e.stopImmediatePropagation();
         } else {
             e.preventDefault();
